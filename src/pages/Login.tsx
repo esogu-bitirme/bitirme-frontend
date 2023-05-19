@@ -65,7 +65,7 @@ export const Login = () => {
                   type="submit"
                   className="py-2 px-4  bg-blue-600 hover:bg-blue-700 focus:ring-blue-500 focus:ring-offset-blue-200 text-white w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  rounded-lg "
                 >
-                  Login
+                  Giriş Yap
                 </button>
               </div>
             </form>
@@ -76,7 +76,7 @@ export const Login = () => {
               target="_blank"
               className="inline-flex items-center text-xs font-thin text-center text-gray-500 hover:text-gray-700 dark:text-gray-100 dark:hover:text-white"
             >
-              <span className="ml-2">You don&#x27;t have an account?</span>
+              <span className="ml-2">Hesabın yok mu?</span>
             </a>
           </div>
         </div>

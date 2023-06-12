@@ -1,6 +1,10 @@
+import { useState } from 'react';
 import loginImage from './login-page-image.webp';
 
 export const Login = () => {
+  // Placeholder logic for auth login routing
+  const [doctor, setDoctor] = useState(false)
+  
   return (
     <div className="flex w-full">
       <div className="flex items-center justify-center w-1/2">

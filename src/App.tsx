@@ -6,6 +6,7 @@ import Register from './pages/Register';
 import AuthContext, { AuthProvider } from './context/AuthContext';
 import { MyPatients } from './pages/MyPatients';
 import ProtectedRoute from './context/ProtectedRoute';
+import { MyReports } from './pages/MyReports';
 function App() {
   const router = createBrowserRouter([
     {
@@ -22,10 +23,18 @@ function App() {
       element: <Register />,
     },
     {
-      path: 'dashboard',
+      path: '/patients',
       element: (
-        <ProtectedRoute>
+        <ProtectedRoute userType="doctor">
           <MyPatients />,
+        </ProtectedRoute>
+      ),
+    },
+    {
+      path: '/reports',
+      element: (
+        <ProtectedRoute userType="patient">
+          <MyReports />,
         </ProtectedRoute>
       ),
     },

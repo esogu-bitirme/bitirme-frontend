@@ -17,21 +17,43 @@ const AuthContext = createContext({
   login: () => {},
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   logout: () => {},
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  devLoginDoctor: () => {},
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  devLoginPatient: () => {},
 });
 export const AuthProvider = ({ children }: { children: any }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [user, setUser] = useState<User | null>(null);
   const [token, setToken] = useState<string | null>(null);
   const [userType, setUserType] = useState<string | null>(null);
+
+  // TODO: Remove this placeholder user when auth is done in backend
+  const tempUser: User = {
+    email: 'mail@mail.com',
+    id: '0000',
+    name: 'Name',
+    surname: 'Surname',
+    type: 'Doctor',
+  };
+
+  // TODO: Remove this placeholder user when auth is done in backend
+  const devLoginDoctor = () => {
+    setIsAuthenticated(true);
+    setUser(tempUser);
+    setToken('PLACEHOLDER TOKEN');
+    setUserType('doctor');
+  };
+  const devLoginPatient = () => {
+    setIsAuthenticated(true);
+    setUser(tempUser);
+    setToken('PLACEHOLDER TOKEN');
+    setUserType('patient');
+  };
+
   const login = () => {
     setIsAuthenticated(true);
-    setUser({
-      email: 'mail@mail.com',
-      id: '0000',
-      name: 'Name',
-      surname: 'Surname',
-      type: 'Doctor',
-    } as User);
+    setUser(tempUser);
     setToken('PLACEHOLDER TOKEN');
     setUserType('Doctor');
   };
@@ -43,7 +65,18 @@ export const AuthProvider = ({ children }: { children: any }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, user, token, userType, login, logout }}>
+    <AuthContext.Provider
+      value={{
+        isAuthenticated,
+        user,
+        token,
+        userType,
+        login,
+        logout,
+        devLoginDoctor,
+        devLoginPatient,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );

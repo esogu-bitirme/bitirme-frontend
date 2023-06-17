@@ -1,34 +1,50 @@
 import React from 'react';
+import { Patient } from '../types/patient';
 
-export const PatientListItem = () => {
+export const PatientListItem = ({
+  patient,
+  setPatientReportsView,
+  setShowPatientReports,
+}: {
+  patient: Patient;
+  setPatientReportsView: React.Dispatch<React.SetStateAction<Patient | undefined>>;
+  setShowPatientReports: React.Dispatch<React.SetStateAction<boolean>>;
+}) => {
   return (
     <tr>
-      <td className="px-5 py-5 text-sm bg-white border-b border-gray-200">
+      <td className="border-b border-gray-200 bg-white px-5 py-5 text-sm">
         <div className="flex items-center">
           <div className="ml-3">
-            <p className="text-gray-900 whitespace-no-wrap">Soner Özaşık</p>
+            <p className="whitespace-no-wrap text-gray-900">{patient.patientName}</p>
           </div>
         </div>
       </td>
-      <td className="px-5 py-5 text-sm bg-white border-b border-gray-200">
-        <p className="text-gray-900 whitespace-no-wrap">123123123123</p>
+      <td className="border-b border-gray-200 bg-white px-5 py-5 text-sm">
+        <p className="whitespace-no-wrap text-gray-900">{patient.patientTCId}</p>
       </td>
-      <td className="px-5 py-5 text-sm bg-white border-b border-gray-200">
-        <p className="text-gray-900 whitespace-no-wrap">12/09/2020</p>
+      <td className="border-b border-gray-200 bg-white px-5 py-5 text-sm">
+        <p className="whitespace-no-wrap text-gray-900">{patient.registerDate}</p>
       </td>
-      <td className="px-5 py-5 text-sm bg-white border-b border-gray-200">
+      <td className="border-b border-gray-200 bg-white px-5 py-5 text-sm">
         <span className="relative inline-block px-3 py-1 font-semibold leading-tight text-green-900">
           <span
             aria-hidden="true"
-            className="absolute inset-0 bg-green-200 rounded-full opacity-50"
+            className="absolute inset-0 rounded-full bg-green-200 opacity-50"
           ></span>
-          <span className="relative">Tedavi Tamamlandı</span>
+          <span className="relative">{patient.status}</span>
         </span>
       </td>
-      <td className="px-5 py-5 text-sm bg-white border-b border-gray-200">
-        <a href="#" className="text-indigo-600 hover:text-indigo-900">
+      <td className="border-b border-gray-200 bg-white px-5 py-5 text-sm">
+        <button
+          type="button"
+          className="w-full rounded-lg  bg-indigo-600 px-3 py-1 text-center text-base font-semibold text-white shadow-md transition duration-200 ease-in hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2  focus:ring-offset-indigo-200 "
+          onClick={() => {
+            setShowPatientReports(true);
+            setPatientReportsView(patient);
+          }}
+        >
           Görüntüle
-        </a>
+        </button>
       </td>
     </tr>
   );

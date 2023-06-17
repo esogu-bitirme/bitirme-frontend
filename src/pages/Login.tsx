@@ -1,10 +1,34 @@
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import loginImage from './login-page-image.webp';
 import AuthContext from '../context/AuthContext';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 
 export const Login = () => {
   const authContext = useContext(AuthContext);
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    authContext.loginFromCookies();
+  }, []);
+
+  useEffect(() => {
+    console.log(authContext.isAuthenticated);
+
+    if (authContext.userType === 'DOCTOR') {
+      console.log(authContext.userType);
+
+      navigate('/patients');
+    } else if (authContext.userType === 'PATIENT') {
+      console.log(authContext.userType);
+
+      navigate('/reports');
+    } else {
+      console.error('Unknown user type');
+    }
+  }, [authContext.userType]);
+
   return (
     <div className="flex w-full">
       <div className="flex w-1/2 items-center justify-center">
@@ -13,7 +37,13 @@ export const Login = () => {
             Giriş Yap
           </div>
           <div className="mt-8">
-            <form action="#" autoComplete="off">
+            <form
+              action="#"
+              autoComplete="off"
+              onSubmit={(e) => {
+                e.preventDefault();
+              }}
+            >
               <div className="mb-2 flex flex-col">
                 <div className="relative flex ">
                   <span className="inline-flex items-center  rounded-l-md border-b border-l border-t border-gray-300 bg-white  px-3 text-sm text-gray-500 shadow">
@@ -39,6 +69,7 @@ export const Login = () => {
                     id="sign-in-email"
                     className=" w-full flex-1 appearance-none rounded-r-lg border border-gray-300 bg-white px-4 py-2 text-base text-gray-700 placeholder-gray-400 shadow-sm focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-600"
                     placeholder="T.C. Kimlik No"
+                    onChange={(e) => setUsername(e.target.value)}
                   />
                 </div>
               </div>
@@ -58,9 +89,12 @@ export const Login = () => {
                   </span>
                   <input
                     type="password"
-                    id="sign-in-email"
+                    id="sign-in-password"
                     className=" w-full flex-1 appearance-none rounded-r-lg border border-gray-300 bg-white px-4 py-2 text-base text-gray-700 placeholder-gray-400 shadow-sm focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-600"
                     placeholder="Şifre"
+                    onChange={(e) => {
+                      setPassword(e.target.value);
+                    }}
                   />
                 </div>
               </div>
@@ -68,29 +102,12 @@ export const Login = () => {
                 <button
                   type="submit"
                   className="w-full rounded-lg  bg-blue-600 px-4 py-2 text-center text-base font-semibold text-white shadow-md transition duration-200 ease-in hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2  focus:ring-offset-blue-200 "
+                  onClick={() => {
+                    authContext.login(username, password);
+                  }}
                 >
                   Giriş Yap
                 </button>
-                <NavLink
-                  type="submit"
-                  className="w-full rounded-lg  bg-blue-600 px-4 py-2 text-center text-base font-semibold text-white shadow-md transition duration-200 ease-in hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2  focus:ring-offset-blue-200 "
-                  onClick={() => {
-                    authContext.devLoginDoctor();
-                  }}
-                  to={'/patients'}
-                >
-                  Doctor
-                </NavLink>
-                <NavLink
-                  type="submit"
-                  className="w-full rounded-lg  bg-blue-600 px-4 py-2 text-center text-base font-semibold text-white shadow-md transition duration-200 ease-in hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2  focus:ring-offset-blue-200 "
-                  onClick={() => {
-                    authContext.devLoginPatient();
-                  }}
-                  to={'/reports'}
-                >
-                  Patient
-                </NavLink>
               </div>
             </form>
           </div>

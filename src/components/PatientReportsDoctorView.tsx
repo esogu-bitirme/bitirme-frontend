@@ -1,24 +1,25 @@
-import React, { useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Patient } from '../types/patient';
 
 import ReportDetails from './ReportDetails';
+import AuthContext from '../context/AuthContext';
 
-const reports = [
-  {
-    id: 1111111111,
-    patientId: 1,
-    doctorId: 1,
-    reportDate: '11/1/2021 10:05:25',
-    reportStatus: 'Bekleniyor',
-  },
-  {
-    id: 2222222222,
-    patientId: 1,
-    doctorId: 1,
-    reportDate: '22/22/2020 10:05:25',
-    reportStatus: 'Bekleniyor',
-  },
-];
+// const reports = [
+//   {
+//     id: 1111111111,
+//     patientId: 1,
+//     doctorId: 1,
+//     reportDate: '11/1/2021 10:05:25',
+//     reportStatus: 'Bekleniyor',
+//   },
+//   {
+//     id: 2222222222,
+//     patientId: 1,
+//     doctorId: 1,
+//     reportDate: '22/22/2020 10:05:25',
+//     reportStatus: 'Bekleniyor',
+//   },
+// ];
 
 export const PatientReportsDoctorView = ({
   patient,
@@ -32,24 +33,28 @@ export const PatientReportsDoctorView = ({
   const [closeStrokeWidth, setCloseStrokeWidth] = useState(1.5);
   const [showReportDetails, setShowReportDetails] = useState(false);
   const [currentReportDetailsId, setCurrentReportDetailsId] = useState<number | undefined>();
+  const [reports, setReports] = useState([]);
+  const authContext = useContext(AuthContext);
+  useEffect(() => {
+    if (!showPatientReports) return;
+    fetch(`https://localhost:50198/api/report/patient/${patient?.id}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*',
+        Authorization: 'Bearer ' + authContext.token,
+      },
+    })
+      .then((response) => {
+        return response.json();
+      })
+      .then((data) => {
+        console.log('asd');
 
-  // useEffect(() => {
-  //   fetch('https://localhost:50198/api/report', {
-  //     method: 'GET',
-  //     headers: {
-  //       'Content-Type': 'application/json',
-  //       'Access-Control-Allow-Origin': '*',
-  //       Authorization: 'Bearer ' + authContext.token,
-  //     },
-  //   })
-  //     .then((response) => {
-  //       return response.json();
-  //     })
-  //     .then((data) => {
-  //       setAllPatients(data);
-  //       console.log(data);
-  //     });
-  // }, []);
+        setReports(data);
+        console.log(data);
+      });
+  }, [showPatientReports]);
   return (
     <>
       {showReportDetails ? (
@@ -143,48 +148,53 @@ export const PatientReportsDoctorView = ({
                         </tr>
                       </thead>
                       <tbody>
-                        
-                        {reports.map((report) => (
-                          <tr>
-                            <td className="border-b border-gray-200 bg-white px-5 py-5 text-sm">
-                              <div className="flex items-center">
-                                <div className="ml-3">
-                                  <p className="whitespace-no-wrap text-gray-900">{report.id}</p>
-                                </div>
-                              </div>
-                            </td>
-                            <td className="border-b border-gray-200 bg-white px-5 py-5 text-sm">
-                              <p className="whitespace-no-wrap text-gray-900">{patient?.name}</p>
-                            </td>
-                            <td className="border-b border-gray-200 bg-white px-5 py-5 text-sm">
-                              <p className="whitespace-no-wrap text-gray-900">
-                                {report.reportDate}
-                              </p>
-                            </td>
-                            <td className="border-b border-gray-200 bg-white px-5 py-5 text-sm">
-                              <span className="relative inline-block px-3 py-1 font-semibold leading-tight text-yellow-900">
-                                <span
-                                  aria-hidden="true"
-                                  className="absolute inset-0 rounded-full bg-yellow-200 opacity-50"
-                                ></span>
-                                <span className="relative">{report.reportStatus}</span>
-                              </span>
-                            </td>
-                            <td className="border-b border-gray-200 bg-white px-5 py-5 text-sm">
-                              <a
-                                href="#"
-                                className="text-indigo-600 hover:text-indigo-900"
-                                onClick={() => {
-                                  setCurrentReportDetailsId(report.id);
-                                  setShowPatientReports(false);
-                                  setShowReportDetails(true);
-                                }}
-                              >
-                                Görüntüle
-                              </a>
-                            </td>
-                          </tr>
-                        ))}
+                        {reports
+                          ? reports.map((report) => (
+                              <tr>
+                                <td className="border-b border-gray-200 bg-white px-5 py-5 text-sm">
+                                  <div className="flex items-center">
+                                    <div className="ml-3">
+                                      <p className="whitespace-no-wrap text-gray-900">
+                                        {report.id}
+                                      </p>
+                                    </div>
+                                  </div>
+                                </td>
+                                <td className="border-b border-gray-200 bg-white px-5 py-5 text-sm">
+                                  <p className="whitespace-no-wrap text-gray-900">
+                                    {patient?.name}
+                                  </p>
+                                </td>
+                                <td className="border-b border-gray-200 bg-white px-5 py-5 text-sm">
+                                  <p className="whitespace-no-wrap text-gray-900">
+                                    {report.reportDate}
+                                  </p>
+                                </td>
+                                <td className="border-b border-gray-200 bg-white px-5 py-5 text-sm">
+                                  <span className="relative inline-block px-3 py-1 font-semibold leading-tight text-yellow-900">
+                                    <span
+                                      aria-hidden="true"
+                                      className="absolute inset-0 rounded-full bg-yellow-200 opacity-50"
+                                    ></span>
+                                    <span className="relative">{report.status}</span>
+                                  </span>
+                                </td>
+                                <td className="border-b border-gray-200 bg-white px-5 py-5 text-sm">
+                                  <a
+                                    href="#"
+                                    className="text-indigo-600 hover:text-indigo-900"
+                                    onClick={() => {
+                                      setCurrentReportDetailsId(report.id);
+                                      setShowPatientReports(false);
+                                      setShowReportDetails(true);
+                                    }}
+                                  >
+                                    Görüntüle
+                                  </a>
+                                </td>
+                              </tr>
+                            ))
+                          : null}
                       </tbody>
                     </table>
                     <div className="xs:flex-row xs:justify-between flex flex-col items-center bg-white px-5 py-5">

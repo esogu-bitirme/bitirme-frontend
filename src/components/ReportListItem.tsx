@@ -1,17 +1,9 @@
 import React from 'react';
 import { useState } from 'react';
-import DoctorReport from '../pages/ReportDetails';
+import DoctorReport from './ReportDetails';
 import { Patient } from '../types/patient';
 
-export const ReportListItem = ({
-  patient,
-  setShowPatientReports,
-  setShowReportDetails,
-}: {
-  patient: Patient | undefined;
-  setShowReportDetails: React.Dispatch<React.SetStateAction<boolean>>;
-  setShowPatientReports: React.Dispatch<React.SetStateAction<boolean>>;
-}) => {
+export const ReportListItem = () => {
   return (
     <tr>
       <td className="border-b border-gray-200 bg-white px-5 py-5 text-sm">
@@ -37,14 +29,7 @@ export const ReportListItem = ({
         </span>
       </td>
       <td className="border-b border-gray-200 bg-white px-5 py-5 text-sm">
-        <a
-          href="#"
-          className="text-indigo-600 hover:text-indigo-900"
-          onClick={() => {
-            setShowReportDetails(true);
-            setShowPatientReports(false);
-          }}
-        >
+        <a href="#" className="text-indigo-600 hover:text-indigo-900">
           Görüntüle
         </a>
       </td>

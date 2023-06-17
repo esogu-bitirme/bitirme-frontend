@@ -14,14 +14,11 @@ export const Login = () => {
   }, []);
 
   useEffect(() => {
-    console.log(authContext.isAuthenticated);
 
     if (authContext.userType === 'DOCTOR') {
-      console.log(authContext.userType);
 
       navigate('/patients');
     } else if (authContext.userType === 'PATIENT') {
-      console.log(authContext.userType);
 
       navigate('/reports');
     } else {

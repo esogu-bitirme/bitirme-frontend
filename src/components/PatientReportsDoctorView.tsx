@@ -1,17 +1,22 @@
 import React, { useState } from 'react';
 import { Patient } from '../types/patient';
+import DoctorReport from '../pages/ReportDetails';
+
 import { ReportListItem } from './ReportListItem';
 
 export const PatientReportsDoctorView = ({
   patient,
   setShowPatientReports,
+  setShowReportDetails,
 }: {
   patient: Patient | undefined;
   setShowPatientReports: React.Dispatch<React.SetStateAction<boolean>>;
+  setShowReportDetails: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
   const [closeStrokeWidth, setCloseStrokeWidth] = useState(1.5);
+
   return (
-    <div className="absolute left-0 right-0 z-10 flex h-screen w-screen items-center justify-center rounded bg-zinc-800 bg-opacity-60">
+    <div className="fixed bottom-0 left-0 right-0 top-0 z-10 flex h-screen w-screen items-center justify-center rounded bg-zinc-800 bg-opacity-60">
       <div className="rounded bg-white">
         <div className="flex w-full justify-between">
           <div className="m-3 text-xl">
@@ -76,12 +81,13 @@ export const PatientReportsDoctorView = ({
                         scope="col"
                         className="border-b border-gray-300 bg-white px-5 py-3 text-left text-sm font-normal uppercase text-gray-800"
                       >
-                        Oluşturma Tarihi
+                        Hasta Adı
                       </th>
                       <th
                         scope="col"
                         className="border-b border-gray-300 bg-white px-5 py-3 text-left text-sm font-normal uppercase text-gray-800"
                       >
+
                         Son Düzenlenme Tarihi
                       </th>
                       <th
@@ -90,12 +96,19 @@ export const PatientReportsDoctorView = ({
                       >
                         Durum
                       </th>
+                      <th
+                        scope="col"
+                        className="border-b border-gray-300 bg-white px-5 py-3 text-left text-sm font-normal uppercase text-gray-800"
+                      ></th>
                     </tr>
                   </thead>
                   <tbody>
-                    <ReportListItem />
-                    <ReportListItem />
-                    <ReportListItem />
+                    <ReportListItem
+                      patient={patient}
+                      setShowPatientReports={setShowPatientReports}
+                      setShowReportDetails={setShowReportDetails}
+                    />
+
                   </tbody>
                 </table>
                 <div className="xs:flex-row xs:justify-between flex flex-col items-center bg-white px-5 py-5">

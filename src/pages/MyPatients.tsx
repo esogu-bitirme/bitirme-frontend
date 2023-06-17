@@ -1,9 +1,11 @@
 import { useContext, useEffect, useState } from 'react';
 import { PatientListItem } from '../components/PatientListItem';
-import DoctorReport from './DoctorReport';
+import DoctorReport from './ReportDetails';
+
 import { PatientReportsDoctorView } from '../components/PatientReportsDoctorView';
 import { Patient } from '../types/patient';
-import AuthContext from '../context/AuthContext';
+import ReportDetails from './ReportDetails';
+
 
 const patients: any = [];
 
@@ -12,6 +14,8 @@ export const MyPatients = () => {
   const [patientReportsView, setPatientReportsView] = useState<Patient>();
   const [showPatientReports, setShowPatientReports] = useState(false);
   const [allPatients, setAllPatients] = useState(patients);
+  const [showReportDetails, setShowReportDetails] = useState(false);
+
 
   useEffect(() => {
     fetch('https://localhost:50198/api/patient/doctor', {
@@ -36,8 +40,10 @@ export const MyPatients = () => {
         <PatientReportsDoctorView
           patient={patientReportsView}
           setShowPatientReports={setShowPatientReports}
+          setShowReportDetails={setShowReportDetails}
         />
       ) : null}
+      {showReportDetails ? <ReportDetails setShowPatientReports /> : null}
       <div className="container relative z-0 mx-auto max-w-7xl px-4 sm:px-8">
         <div className="py-8">
           <div className="mb-1 flex w-full flex-row justify-between sm:mb-0">

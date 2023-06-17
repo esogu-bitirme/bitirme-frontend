@@ -50,7 +50,6 @@ export const AuthProvider = ({ children }: { children: any }) => {
       })
       .then((data) => {
         const userData: UserToken = parseJwt(data);
-        console.log(userData);
 
         if (userData) {
           localStorage.setItem('token', data);

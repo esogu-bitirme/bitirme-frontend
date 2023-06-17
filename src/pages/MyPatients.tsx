@@ -1,8 +1,10 @@
 import { PatientListItem } from '../components/PatientListItem';
+import DoctorReport from './DoctorReport';
 
 export const MyPatients = () => {
   return (
     <div className="container max-w-7xl px-4 mx-auto sm:px-8">
+      <DoctorReport></DoctorReport>
       <div className="py-8">
         <div className="flex flex-row justify-between w-full mb-1 sm:mb-0">
           <h2 className="text-2xl leading-tight">Hastalarım</h2>

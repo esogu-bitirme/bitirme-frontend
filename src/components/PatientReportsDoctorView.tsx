@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Patient } from '../types/patient';
+import { ReportListItem } from './ReportListItem';
 
 export const PatientReportsDoctorView = ({
   patient,
@@ -16,12 +17,12 @@ export const PatientReportsDoctorView = ({
           <div className="m-3 text-xl">
             <div>
               <p>
-                <b>Hasta Adı:</b> {patient?.patientName}
+                <b>Hasta Adı:</b> {patient?.name} {patient?.surname}
               </p>
             </div>
             <div>
               <p>
-                <b>TC Kimlik:</b> {patient?.patientTCId}
+                <b>TC Kimlik:</b> {patient?.tckn}
               </p>
             </div>
           </div>
@@ -67,6 +68,12 @@ export const PatientReportsDoctorView = ({
                       </th>
                       <th
                         scope="col"
+                        className="border-b  border-gray-300 bg-white px-5 py-3 text-left text-sm font-normal uppercase text-gray-800"
+                      >
+                        Hasta Adı
+                      </th>
+                      <th
+                        scope="col"
                         className="border-b border-gray-300 bg-white px-5 py-3 text-left text-sm font-normal uppercase text-gray-800"
                       >
                         Oluşturma Tarihi
@@ -75,7 +82,7 @@ export const PatientReportsDoctorView = ({
                         scope="col"
                         className="border-b border-gray-300 bg-white px-5 py-3 text-left text-sm font-normal uppercase text-gray-800"
                       >
-                        Durum
+                        Son Düzenlenme Tarihi
                       </th>
                       <th
                         scope="col"
@@ -86,31 +93,9 @@ export const PatientReportsDoctorView = ({
                     </tr>
                   </thead>
                   <tbody>
-                    <tr>
-                      <td className="border-b border-gray-300 bg-white px-5 py-5 text-sm">
-                        <p className="whitespace-no-wrap text-gray-900">123123</p>
-                      </td>
-                      <td className="border-b border-gray-300 bg-white px-5 py-5 text-sm">
-                        <p className="whitespace-no-wrap text-gray-900">12/09/2020</p>
-                      </td>
-                      <td className="border-b border-gray-300 bg-white px-5 py-5 text-sm">
-                        <span className="relative inline-block px-3 py-1 font-semibold leading-tight text-green-900">
-                          <span
-                            aria-hidden="true"
-                            className="absolute inset-0 rounded-full bg-green-200 opacity-50"
-                          ></span>
-                          <span className="relative">Bekliyor</span>
-                        </span>
-                      </td>
-                      <td className="border-b border-gray-300 bg-white px-5 py-5 text-sm">
-                        <button
-                          type="button"
-                          className="w-full rounded-lg  bg-indigo-600 px-3 py-1 text-center text-base font-semibold text-white shadow-md transition duration-200 ease-in hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2  focus:ring-offset-indigo-200 "
-                        >
-                          Görüntüle
-                        </button>
-                      </td>
-                    </tr>
+                    <ReportListItem />
+                    <ReportListItem />
+                    <ReportListItem />
                   </tbody>
                 </table>
                 <div className="xs:flex-row xs:justify-between flex flex-col items-center bg-white px-5 py-5">

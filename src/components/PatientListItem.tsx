@@ -15,25 +15,22 @@ export const PatientListItem = ({
       <td className="border-b border-gray-200 bg-white px-5 py-5 text-sm">
         <div className="flex items-center">
           <div className="ml-3">
-            <p className="whitespace-no-wrap text-gray-900">{patient.patientName}</p>
+            <p className="whitespace-no-wrap text-gray-900">
+              {patient.name} {patient.surname}
+            </p>
           </div>
         </div>
       </td>
       <td className="border-b border-gray-200 bg-white px-5 py-5 text-sm">
-        <p className="whitespace-no-wrap text-gray-900">{patient.patientTCId}</p>
+        <p className="whitespace-no-wrap text-gray-900">{patient.tckn}</p>
       </td>
       <td className="border-b border-gray-200 bg-white px-5 py-5 text-sm">
-        <p className="whitespace-no-wrap text-gray-900">{patient.registerDate}</p>
+        <p className="whitespace-no-wrap text-gray-900">{patient.phoneNumber}</p>
       </td>
       <td className="border-b border-gray-200 bg-white px-5 py-5 text-sm">
-        <span className="relative inline-block px-3 py-1 font-semibold leading-tight text-green-900">
-          <span
-            aria-hidden="true"
-            className="absolute inset-0 rounded-full bg-green-200 opacity-50"
-          ></span>
-          <span className="relative">{patient.status}</span>
-        </span>
+        <p className="whitespace-no-wrap text-gray-900">{patient.address}</p>
       </td>
+
       <td className="border-b border-gray-200 bg-white px-5 py-5 text-sm">
         <button
           type="button"

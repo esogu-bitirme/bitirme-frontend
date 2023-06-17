@@ -1,13 +1,15 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import AuthContext from '../context/AuthContext';
 
 export const Header = () => {
+  const authContext = useContext(AuthContext);
   return (
     <div>
-      <nav className="flex flex-wrap items-center justify-between p-4 bg-white">
+      <nav className="flex flex-wrap items-center justify-between bg-white p-4">
         <div className="block lg:hidden">
-          <button className="flex items-center px-3 py-2 text-indigo-500 border border-indigo-500 rounded navbar-burger">
+          <button className="navbar-burger flex items-center rounded border border-indigo-500 px-3 py-2 text-indigo-500">
             <svg
-              className="w-3 h-3 fill-current"
+              className="h-3 w-3 fill-current"
               viewBox="0 0 20 20"
               xmlns="http://www.w3.org/2000/svg"
             >
@@ -16,36 +18,39 @@ export const Header = () => {
             </svg>
           </button>
         </div>
-        <div className="hidden w-full navbar-menu lg:order-1 lg:block lg:w-2/5">
+        <div className="navbar-menu hidden w-full lg:order-1 lg:block lg:w-2/5">
           <a
-            className="block mt-4 mr-10 text-blue-900 lg:inline-block lg:mt-0 hover:text-indigo-600"
+            className="mr-10 mt-4 block text-blue-900 hover:text-indigo-600 lg:mt-0 lg:inline-block"
             href="#"
           >
             Anasayfa
           </a>
           <a
-            className="block mt-4 mr-10 text-blue-900 lg:inline-block lg:mt-0 hover:text-indigo-600"
+            className="mr-10 mt-4 block text-blue-900 hover:text-indigo-600 lg:mt-0 lg:inline-block"
             href="#"
           >
             Hastalarım
           </a>
           <a
-            className="block mt-4 mr-10 text-blue-900 lg:inline-block lg:mt-0 hover:text-indigo-600"
+            className="mr-10 mt-4 block text-blue-900 hover:text-indigo-600 lg:mt-0 lg:inline-block"
             href="#"
           >
             Raporlarım
           </a>
         </div>
-        <div className="hidden w-full navbar-menu lg:order-3 lg:block lg:w-2/5 lg:text-right">
+        <div className="navbar-menu hidden w-full lg:order-3 lg:block lg:w-2/5 lg:text-right">
           <a
-            className="block mt-4 mr-10 text-blue-900 lg:inline-block lg:mt-0 hover:text-indigo-600"
+            className="mr-10 mt-4 block text-blue-900 hover:text-indigo-600 lg:mt-0 lg:inline-block"
             href="#"
           >
             Profil
           </a>
           <a
-            className="block mt-4 text-blue-900 lg:inline-block lg:mt-0 hover:text-indigo-600"
-            href="#"
+            className="mt-4 block text-blue-900 hover:text-indigo-600 lg:mt-0 lg:inline-block"
+            href="/login"
+            onClick={() => {
+              authContext.logout();
+            }}
           >
             Çıkış Yap
           </a>

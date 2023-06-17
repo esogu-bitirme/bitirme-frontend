@@ -1,67 +1,91 @@
 import { createContext, useState } from 'react';
-
-type User = {
-  id: string;
-  name: string;
-  surname: string;
-  email: string;
-  type: string;
-};
+import { useNavigate } from 'react-router-dom';
+import { UserToken } from '../types/userToken';
 
 const AuthContext = createContext({
   isAuthenticated: false,
-  user: null as User | null,
+  user: null as UserToken | null,
   token: null as string | null,
   userType: null as string | null,
   // eslint-disable-next-line @typescript-eslint/no-empty-function
-  login: () => {},
+  login: (username: string, password: string) => {},
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   logout: () => {},
   // eslint-disable-next-line @typescript-eslint/no-empty-function
-  devLoginDoctor: () => {},
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  devLoginPatient: () => {},
+  loginFromCookies: () => {},
 });
 export const AuthProvider = ({ children }: { children: any }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<UserToken | null>(null);
   const [token, setToken] = useState<string | null>(null);
   const [userType, setUserType] = useState<string | null>(null);
 
-  // TODO: Remove this placeholder user when auth is done in backend
-  const tempUser: User = {
-    email: 'mail@mail.com',
-    id: '0000',
-    name: 'Name',
-    surname: 'Surname',
-    type: 'Doctor',
+  const parseJwt = (token: string) => {
+    const base64Url = token.split('.')[1];
+    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    const jsonPayload = decodeURIComponent(
+      window
+        .atob(base64)
+        .split('')
+        .map(function (c) {
+          return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+        })
+        .join('')
+    );
+
+    return JSON.parse(jsonPayload);
   };
 
-  // TODO: Remove this placeholder user when auth is done in backend
-  const devLoginDoctor = () => {
-    setIsAuthenticated(true);
-    setUser(tempUser);
-    setToken('PLACEHOLDER TOKEN');
-    setUserType('doctor');
-  };
-  const devLoginPatient = () => {
-    setIsAuthenticated(true);
-    setUser(tempUser);
-    setToken('PLACEHOLDER TOKEN');
-    setUserType('patient');
-  };
+  const login = (username: string, password: string) => {
+    fetch('https://localhost:50198/api/user/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*',
+      },
+      body: JSON.stringify({ username, password }),
+    })
+      .then((response) => {
+        return response.text();
+      })
+      .then((data) => {
+        const userData: UserToken = parseJwt(data);
+        console.log(userData);
 
-  const login = () => {
-    setIsAuthenticated(true);
-    setUser(tempUser);
-    setToken('PLACEHOLDER TOKEN');
-    setUserType('Doctor');
+        if (userData) {
+          localStorage.setItem('token', data);
+          setIsAuthenticated(true);
+          setUser(userData);
+          setToken(data);
+          setUserType(userData.role);
+        }
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+      });
   };
 
   const logout = () => {
     setIsAuthenticated(false);
     setUser(null);
     setToken(null);
+    setUserType(null);
+    localStorage.removeItem('token');
+  };
+
+  const loginFromCookies = () => {
+    const token = localStorage.getItem('token');
+    let userData: UserToken | null = null;
+    if (token) {
+      userData = parseJwt(token);
+    }
+    if (userData && userData.exp && userData.exp > Date.now() / 1000) {
+      setIsAuthenticated(true);
+      setUser(userData);
+      setToken(token);
+      setUserType(userData.role);
+      return;
+    }
   };
 
   return (
@@ -73,8 +97,7 @@ export const AuthProvider = ({ children }: { children: any }) => {
         userType,
         login,
         logout,
-        devLoginDoctor,
-        devLoginPatient,
+        loginFromCookies,
       }}
     >
       {children}

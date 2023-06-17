@@ -27,7 +27,7 @@ function App() {
     {
       path: '/patients',
       element: (
-        <ProtectedRoute userType="doctor">
+        <ProtectedRoute userType="DOCTOR">
           <Header />
           <MyPatients />
           <Footer />
@@ -37,7 +37,7 @@ function App() {
     {
       path: '/reports',
       element: (
-        <ProtectedRoute userType="patient">
+        <ProtectedRoute userType="PATIENT">
           <Header />
           <MyReports />
           <Footer />

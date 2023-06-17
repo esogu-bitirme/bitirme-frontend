@@ -37,7 +37,7 @@ export const AuthProvider = ({ children }: { children: any }) => {
   };
 
   const login = (username: string, password: string) => {
-    fetch('https://localhost:50198/api/user/login', {
+    fetch('https://localhost:50198/api/user/token', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

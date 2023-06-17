@@ -1,16 +1,21 @@
 import React, { useState } from 'react';
 import { Patient } from '../types/patient';
+import DoctorReport from '../pages/ReportDetails';
+import { ReportListItem } from './ReportListItem';
 
 export const PatientReportsDoctorView = ({
   patient,
   setShowPatientReports,
+  setShowReportDetails,
 }: {
   patient: Patient | undefined;
   setShowPatientReports: React.Dispatch<React.SetStateAction<boolean>>;
+  setShowReportDetails: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
   const [closeStrokeWidth, setCloseStrokeWidth] = useState(1.5);
+
   return (
-    <div className="absolute left-0 right-0 z-10 flex h-screen w-screen items-center justify-center rounded bg-zinc-800 bg-opacity-60">
+    <div className="fixed bottom-0 left-0 right-0 top-0 z-10 flex h-screen w-screen items-center justify-center rounded bg-zinc-800 bg-opacity-60">
       <div className="rounded bg-white">
         <div className="flex w-full justify-between">
           <div className="m-3 text-xl">
@@ -69,6 +74,12 @@ export const PatientReportsDoctorView = ({
                         scope="col"
                         className="border-b border-gray-300 bg-white px-5 py-3 text-left text-sm font-normal uppercase text-gray-800"
                       >
+                        Hasta Adı
+                      </th>
+                      <th
+                        scope="col"
+                        className="border-b border-gray-300 bg-white px-5 py-3 text-left text-sm font-normal uppercase text-gray-800"
+                      >
                         Oluşturma Tarihi
                       </th>
                       <th
@@ -80,37 +91,15 @@ export const PatientReportsDoctorView = ({
                       <th
                         scope="col"
                         className="border-b border-gray-300 bg-white px-5 py-3 text-left text-sm font-normal uppercase text-gray-800"
-                      >
-                        Durum
-                      </th>
+                      ></th>
                     </tr>
                   </thead>
                   <tbody>
-                    <tr>
-                      <td className="border-b border-gray-300 bg-white px-5 py-5 text-sm">
-                        <p className="whitespace-no-wrap text-gray-900">123123</p>
-                      </td>
-                      <td className="border-b border-gray-300 bg-white px-5 py-5 text-sm">
-                        <p className="whitespace-no-wrap text-gray-900">12/09/2020</p>
-                      </td>
-                      <td className="border-b border-gray-300 bg-white px-5 py-5 text-sm">
-                        <span className="relative inline-block px-3 py-1 font-semibold leading-tight text-green-900">
-                          <span
-                            aria-hidden="true"
-                            className="absolute inset-0 rounded-full bg-green-200 opacity-50"
-                          ></span>
-                          <span className="relative">Bekliyor</span>
-                        </span>
-                      </td>
-                      <td className="border-b border-gray-300 bg-white px-5 py-5 text-sm">
-                        <button
-                          type="button"
-                          className="w-full rounded-lg  bg-indigo-600 px-3 py-1 text-center text-base font-semibold text-white shadow-md transition duration-200 ease-in hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2  focus:ring-offset-indigo-200 "
-                        >
-                          Görüntüle
-                        </button>
-                      </td>
-                    </tr>
+                    <ReportListItem
+                      patient={patient}
+                      setShowPatientReports={setShowPatientReports}
+                      setShowReportDetails={setShowReportDetails}
+                    />
                   </tbody>
                 </table>
                 <div className="xs:flex-row xs:justify-between flex flex-col items-center bg-white px-5 py-5">

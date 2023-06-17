@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { PatientListItem } from '../components/PatientListItem';
 import DoctorReport from './ReportDetails';
 
@@ -6,43 +6,34 @@ import { PatientReportsDoctorView } from '../components/PatientReportsDoctorView
 import { Patient } from '../types/patient';
 import ReportDetails from './ReportDetails';
 
-const patients = [
-  {
-    patientName: 'John Doe',
-    patientTCId: '123456789',
-    registerDate: '01.01.2021',
-    status: 'Aktif',
-    patientId: 123,
-  },
-  {
-    patientName: 'Jane Doe',
-    patientTCId: '987654321',
-    registerDate: '01.01.2021',
-    status: 'Aktif',
-    patientId: 456,
-  },
-  {
-    patientName: 'John Smith',
-    patientTCId: '123123123',
-    registerDate: '01.01.2021',
-    status: 'Aktif',
-    patientId: 789,
-  },
-  {
-    patientName: 'Jane Smith',
-    patientTCId: '321321321',
-    registerDate: '01.01.2021',
-    status: 'Aktif',
-    patientId: 101,
-  },
-];
+
+const patients: any = [];
 
 export const MyPatients = () => {
+  const authContext = useContext(AuthContext);
   const [patientReportsView, setPatientReportsView] = useState<Patient>();
   const [showPatientReports, setShowPatientReports] = useState(false);
   const [allPatients, setAllPatients] = useState(patients);
   const [showReportDetails, setShowReportDetails] = useState(false);
 
+
+  useEffect(() => {
+    fetch('https://localhost:50198/api/patient/doctor', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*',
+        Authorization: 'Bearer ' + authContext.token,
+      },
+    })
+      .then((response) => {
+        return response.json();
+      })
+      .then((data) => {
+        console.log(data);
+        setAllPatients(data);
+      });
+  }, []);
   return (
     <div>
       {showPatientReports ? (
@@ -124,13 +115,13 @@ export const MyPatients = () => {
                       scope="col"
                       className="border-b border-gray-200 bg-white px-5 py-3 text-left text-sm font-normal uppercase text-gray-800"
                     >
-                      Kayıt Tarihi
+                      Telefon Numarası
                     </th>
                     <th
                       scope="col"
                       className="border-b border-gray-200 bg-white px-5 py-3 text-left text-sm font-normal uppercase text-gray-800"
                     >
-                      Durum
+                      Adres
                     </th>
                     <th
                       scope="col"

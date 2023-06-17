@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Patient } from '../types/patient';
 import DoctorReport from '../pages/ReportDetails';
+
 import { ReportListItem } from './ReportListItem';
 
 export const PatientReportsDoctorView = ({
@@ -21,12 +22,12 @@ export const PatientReportsDoctorView = ({
           <div className="m-3 text-xl">
             <div>
               <p>
-                <b>Hasta Adı:</b> {patient?.patientName}
+                <b>Hasta Adı:</b> {patient?.name} {patient?.surname}
               </p>
             </div>
             <div>
               <p>
-                <b>TC Kimlik:</b> {patient?.patientTCId}
+                <b>TC Kimlik:</b> {patient?.tckn}
               </p>
             </div>
           </div>
@@ -72,6 +73,12 @@ export const PatientReportsDoctorView = ({
                       </th>
                       <th
                         scope="col"
+                        className="border-b  border-gray-300 bg-white px-5 py-3 text-left text-sm font-normal uppercase text-gray-800"
+                      >
+                        Hasta Adı
+                      </th>
+                      <th
+                        scope="col"
                         className="border-b border-gray-300 bg-white px-5 py-3 text-left text-sm font-normal uppercase text-gray-800"
                       >
                         Hasta Adı
@@ -80,7 +87,8 @@ export const PatientReportsDoctorView = ({
                         scope="col"
                         className="border-b border-gray-300 bg-white px-5 py-3 text-left text-sm font-normal uppercase text-gray-800"
                       >
-                        Oluşturma Tarihi
+
+                        Son Düzenlenme Tarihi
                       </th>
                       <th
                         scope="col"
@@ -100,6 +108,7 @@ export const PatientReportsDoctorView = ({
                       setShowPatientReports={setShowPatientReports}
                       setShowReportDetails={setShowReportDetails}
                     />
+
                   </tbody>
                 </table>
                 <div className="xs:flex-row xs:justify-between flex flex-col items-center bg-white px-5 py-5">

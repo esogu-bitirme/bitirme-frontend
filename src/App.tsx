@@ -7,6 +7,8 @@ import AuthContext, { AuthProvider } from './context/AuthContext';
 import { MyPatients } from './pages/MyPatients';
 import ProtectedRoute from './context/ProtectedRoute';
 import { MyReports } from './pages/MyReports';
+import { Header } from './components/Header';
+import { Footer } from './components/Footer';
 function App() {
   const router = createBrowserRouter([
     {
@@ -26,7 +28,9 @@ function App() {
       path: '/patients',
       element: (
         <ProtectedRoute userType="doctor">
-          <MyPatients />,
+          <Header />
+          <MyPatients />
+          <Footer />
         </ProtectedRoute>
       ),
     },
@@ -34,14 +38,16 @@ function App() {
       path: '/reports',
       element: (
         <ProtectedRoute userType="patient">
-          <MyReports />,
+          <Header />
+          <MyReports />
+          <Footer />
         </ProtectedRoute>
       ),
     },
   ]);
 
   return (
-    <div className="flex w-screen justify-center">
+    <div className="z-0 flex h-screen w-screen flex-col justify-between ">
       <AuthProvider>
         <RouterProvider router={router} />
       </AuthProvider>

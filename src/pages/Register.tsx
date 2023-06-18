@@ -9,6 +9,7 @@ function Register() {
   const [surname, setSurname] = useState('');
   const [address, setAddress] = useState('');
   const [mail, setMail] = useState('');
+  const [gender, setGender] = useState('Erkek');
   const [officeNo, setOfficeNo] = useState('');
   const [branch, setBranch] = useState('');
   const [usercheck, setusercheck] = useState('hasta');
@@ -34,6 +35,7 @@ function Register() {
   };
 
   const datecheck = (e: React.ChangeEvent<HTMLInputElement>) => {
+    console.log;
     const inputValue = new Date(e.target.value);
     const currentDate = new Date();
     if (inputValue < currentDate) {
@@ -81,6 +83,11 @@ function Register() {
     setOfficeNo(inputValue);
   };
 
+  const handleGender = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const inputValue = e.target.value;
+    setGender(inputValue);
+  };
+
   const handleChangephone = (e: React.ChangeEvent<HTMLInputElement>) => {
     const inputValue = e.target.value;
     const numericValue = inputValue.replace(/\D/, ''); // Remove non-numeric characters
@@ -89,6 +96,7 @@ function Register() {
   };
 
   const registerAsPatient = () => {
+    console.log(date);
     fetch('https://localhost:50198/api/patient', {
       method: 'POST',
       headers: {
@@ -101,6 +109,8 @@ function Register() {
         tckn: valuetc,
         phoneNumber: valuephone,
         address: address,
+        gender: gender,
+        birthDate: date,
         user: { username: name + surname, password: pass, email: mail },
       }),
     })
@@ -130,6 +140,8 @@ function Register() {
         address: address,
         officeNo: officeNo,
         branch: branch,
+        gender: gender,
+        birthDate: date,
         user: { username: name + surname, password: pass, email: mail },
       }),
     })
@@ -153,7 +165,7 @@ function Register() {
               Kayıt Ol
             </div>
             <div className="flex items-center justify-center">
-              <label className="mx-2 mt-2 select-none text-white">
+              <label className="mx-2 mt-2 select-none text-black">
                 <input
                   type="checkbox"
                   className="accent-yellow-500"
@@ -164,7 +176,7 @@ function Register() {
                 />{' '}
                 Hasta
               </label>
-              <label className="mx-2 mt-2 select-none text-white">
+              <label className="mx-2 mt-2 select-none text-black">
                 <input
                   type="checkbox"
                   className="accent-pink-500"
@@ -257,6 +269,8 @@ function Register() {
                         className="w-full flex-1 appearance-none rounded-lg border border-gray-300 border-transparent bg-white px-4 py-2 text-base text-gray-700 placeholder-gray-400 shadow-sm focus:border-transparent focus:outline-none focus:ring-2 focus:ring-purple-600"
                         name="Cinsiyet"
                         id="create-patient-gender"
+                        value={gender}
+                        onChange={handleGender}
                       >
                         <option value="" className="disabled selected hidden text-gray-400">
                           Cinsiyet
@@ -328,7 +342,7 @@ function Register() {
               Kayıt Ol
             </div>
             <div className="flex items-center justify-center">
-              <label className="mx-2 mt-2 select-none text-white">
+              <label className="mx-2 mt-2 select-none text-black">
                 <input
                   type="checkbox"
                   className="accent-yellow-500"
@@ -339,7 +353,7 @@ function Register() {
                 />{' '}
                 Hasta
               </label>
-              <label className="mx-2 mt-2 select-none text-white">
+              <label className="mx-2 mt-2 select-none text-black">
                 <input
                   type="checkbox"
                   className="accent-pink-500"
@@ -420,6 +434,8 @@ function Register() {
                       id="create-doctor-bday"
                       className=" w-full flex-1 appearance-none rounded-lg border border-gray-300 border-transparent bg-white px-4 py-2 text-base text-gray-700 placeholder-gray-400 shadow-sm focus:border-transparent focus:outline-none focus:ring-2 focus:ring-purple-600"
                       placeholder="Doğum Tarihi"
+                      value={date}
+                      onChange={datecheck}
                     />
                   </div>
                 </div>
@@ -454,6 +470,8 @@ function Register() {
                           className="w-full flex-1 appearance-none rounded-lg border border-gray-300 border-transparent bg-white px-4 py-2 text-base text-gray-700 placeholder-gray-400 shadow-sm focus:border-transparent focus:outline-none focus:ring-2 focus:ring-purple-600"
                           name="Cinsiyet"
                           id="create-patient-gender"
+                          value={gender}
+                          onChange={handleGender}
                         >
                           <option value="" className="disabled selected hidden text-gray-400">
                             Cinsiyet

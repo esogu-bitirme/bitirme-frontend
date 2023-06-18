@@ -1,5 +1,5 @@
 import React, { ChangeEvent, useState, useEffect } from 'react';
-import ImageShow from './ImageShow';
+import ImageDetails from './ImageDetails';
 
 const ReportDetails = ({
   reportId,
@@ -59,10 +59,10 @@ const ReportDetails = ({
   return (
     <>
       {showImage ? (
-        <ImageShow
+        <ImageDetails
           setShowImage={setShowImage}
           showImage={showImage}
-          setShowReportDetails={setShowReportDetails}
+          setShowReportDetails={setThisShow}
         />
       ) : null}
       {showReportDetails && thisShow ? (

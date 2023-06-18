@@ -148,47 +148,53 @@ export const PatientReportsDoctorView = ({
                         </tr>
                       </thead>
                       <tbody>
-                        {reports.map((report) => (
-                          <tr>
-                            <td className="border-b border-gray-200 bg-white px-5 py-5 text-sm">
-                              <div className="flex items-center">
-                                <div className="ml-3">
-                                  <p className="whitespace-no-wrap text-gray-900">{report.id}</p>
-                                </div>
-                              </div>
-                            </td>
-                            <td className="border-b border-gray-200 bg-white px-5 py-5 text-sm">
-                              <p className="whitespace-no-wrap text-gray-900">{patient?.name}</p>
-                            </td>
-                            <td className="border-b border-gray-200 bg-white px-5 py-5 text-sm">
-                              <p className="whitespace-no-wrap text-gray-900">
-                                {report.reportDate}
-                              </p>
-                            </td>
-                            <td className="border-b border-gray-200 bg-white px-5 py-5 text-sm">
-                              <span className="relative inline-block px-3 py-1 font-semibold leading-tight text-yellow-900">
-                                <span
-                                  aria-hidden="true"
-                                  className="absolute inset-0 rounded-full bg-yellow-200 opacity-50"
-                                ></span>
-                                <span className="relative">{report.reportStatus}</span>
-                              </span>
-                            </td>
-                            <td className="border-b border-gray-200 bg-white px-5 py-5 text-sm">
-                              <a
-                                href="#"
-                                className="text-indigo-600 hover:text-indigo-900"
-                                onClick={() => {
-                                  setCurrentReportDetailsId(report.id);
-                                  setShowPatientReports(false);
-                                  setShowReportDetails(true);
-                                }}
-                              >
-                                Görüntüle
-                              </a>
-                            </td>
-                          </tr>
-                        ))}
+                        {reports
+                          ? reports.map((report) => (
+                              <tr>
+                                <td className="border-b border-gray-200 bg-white px-5 py-5 text-sm">
+                                  <div className="flex items-center">
+                                    <div className="ml-3">
+                                      <p className="whitespace-no-wrap text-gray-900">
+                                        {report.id}
+                                      </p>
+                                    </div>
+                                  </div>
+                                </td>
+                                <td className="border-b border-gray-200 bg-white px-5 py-5 text-sm">
+                                  <p className="whitespace-no-wrap text-gray-900">
+                                    {patient?.name}
+                                  </p>
+                                </td>
+                                <td className="border-b border-gray-200 bg-white px-5 py-5 text-sm">
+                                  <p className="whitespace-no-wrap text-gray-900">
+                                    {report.reportDate}
+                                  </p>
+                                </td>
+                                <td className="border-b border-gray-200 bg-white px-5 py-5 text-sm">
+                                  <span className="relative inline-block px-3 py-1 font-semibold leading-tight text-yellow-900">
+                                    <span
+                                      aria-hidden="true"
+                                      className="absolute inset-0 rounded-full bg-yellow-200 opacity-50"
+                                    ></span>
+                                    <span className="relative">{report.status}</span>
+                                  </span>
+                                </td>
+                                <td className="border-b border-gray-200 bg-white px-5 py-5 text-sm">
+                                  <a
+                                    href="#"
+                                    className="text-indigo-600 hover:text-indigo-900"
+                                    onClick={() => {
+                                      setCurrentReportDetailsId(report.id);
+                                      setShowPatientReports(false);
+                                      setShowReportDetails(true);
+                                    }}
+                                  >
+                                    Görüntüle
+                                  </a>
+                                </td>
+                              </tr>
+                            ))
+                          : null}
                       </tbody>
                     </table>
                     <div className="xs:flex-row xs:justify-between flex flex-col items-center bg-white px-5 py-5">

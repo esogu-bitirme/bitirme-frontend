@@ -1,7 +1,31 @@
-import React from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { ReportListItem } from '../components/ReportListItem';
+import AuthContext from '../context/AuthContext';
+
+const reports: any = [];
 
 export const MyReports = () => {
+  const authContext = useContext(AuthContext);
+  const [allReports, setAllReports] = useState(reports);
+
+  useEffect(() => {
+    fetch('https://localhost:50198/api/report/myreports', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*',
+        Authorization: 'Bearer ' + authContext.token,
+      },
+    })
+      .then((response) => {
+        return response.json();
+      })
+      .then((data) => {
+        setAllReports(data);
+        console.log(data);
+      });
+  }, []);
+
   return (
     <div className="container mx-auto max-w-7xl px-4 sm:px-8">
       <div className="py-8">
@@ -54,10 +78,9 @@ export const MyReports = () => {
                 </tr>
               </thead>
               <tbody>
-                <ReportListItem />
-                <ReportListItem />
-                <ReportListItem />
-                <ReportListItem />
+                {allReports.map((report: any) => (
+                  <ReportListItem report={report} />
+                ))}
               </tbody>
             </table>
           </div>

@@ -1,4 +1,5 @@
-import React, { ChangeEvent, useState } from 'react';
+import React, { ChangeEvent, useState, useEffect } from 'react';
+import ImageShow from './ImageShow';
 
 const ReportDetails = ({
   reportId,
@@ -11,28 +12,60 @@ const ReportDetails = ({
   setShowReportDetails: React.Dispatch<React.SetStateAction<boolean>>;
   setShowPatientReports: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
+  const [thisShow, setThisShow] = useState(true);
   const [reportid, setreportid] = useState(1);
-  const [image, setImage] = useState<File>();
-  const [setshowImage, setsetshowImage] = useState(false);
+  const [imageFile, setImageFile] = useState<File>();
+  const [showImage, setShowImage] = useState(false);
   const [closeStrokeWidth, setCloseStrokeWidth] = useState(1.5);
-
+  let imageurl;
   const current = new Date();
   const date = `${current.getDate()}/${current.getMonth() + 1}/${current.getFullYear()}`;
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
-      setImage(e.target.files[0]);
+      setImageFile(e.target.files[0]);
     }
   };
 
   const handleUploadClick = () => {
-    if (!image) {
+    if (!imageFile) {
       return;
     }
+    console.log(imageFile);
+    imageurl = URL.createObjectURL(imageFile);
+    console.log(imageurl);
+    //   fetch('/endpoint', {
+    //     method: 'POST',
+    //     body: JSON.stringify({
+    //       reportId: reportId,
+    //       picName: imageFile?.name,
+    //       picture: imageFile,
+    //     }),
+    //headers: {
+    //  'Content-type': 'application/json; charset=UTF-8',
+    // },
+    // })
+    // .then((response) => response.json())
+    // .then((data) => {
+    //   console.log(data);
+    // Handle data
+    //  })
+    //  .catch((err) => {
+    //     console.log(err.message);
+    // });
+    //};
   };
+
   return (
     <>
-      {showReportDetails ? (
+      {showImage ? (
+        <ImageShow
+          setShowImage={setShowImage}
+          showImage={showImage}
+          setShowReportDetails={setShowReportDetails}
+        />
+      ) : null}
+      {showReportDetails && thisShow ? (
         <div className="fixed bottom-0 left-0 right-0 top-0 z-10 flex h-screen w-screen items-center justify-center bg-zinc-800 bg-opacity-60">
           <section className="w-full">
             <div className="container mx-auto max-w-2xl shadow-md md:w-3/4">
@@ -95,7 +128,7 @@ const ReportDetails = ({
                       </thead>
                       <tbody className="text-center">
                         <tr>
-                          <td>görseladı.lgbt</td>
+                          <td>{imageFile?.name}</td>
                           <td>{date}</td>
                           <td className="flex">
                             <button
@@ -107,6 +140,10 @@ const ReportDetails = ({
                             <button
                               type="button"
                               className="w-1/2 rounded-lg  bg-indigo-600 px-3 py-1 text-center font-semibold text-white  transition ease-in  hover:bg-indigo-700 "
+                              onClick={() => {
+                                setThisShow(false);
+                                setShowImage(true);
+                              }}
                             >
                               Görüntüle
                             </button>

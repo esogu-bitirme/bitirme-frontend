@@ -36,14 +36,14 @@ export const AuthProvider = ({ children }: { children: any }) => {
     return JSON.parse(jsonPayload);
   };
 
-  const login = (username: string, password: string) => {
+  const login = (email: string, password: string) => {
     fetch('https://localhost:50198/api/user/token', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'Access-Control-Allow-Origin': '*',
       },
-      body: JSON.stringify({ username, password }),
+      body: JSON.stringify({ email, password }),
     })
       .then((response) => {
         return response.text();

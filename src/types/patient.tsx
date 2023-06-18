@@ -4,4 +4,5 @@ export type Patient = {
   tckn: string;
   phoneNumber: string;
   address: string;
+  id: number;
 };

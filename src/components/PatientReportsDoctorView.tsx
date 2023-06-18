@@ -1,24 +1,25 @@
-import React, { useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Patient } from '../types/patient';
 
 import ReportDetails from './ReportDetails';
+import AuthContext from '../context/AuthContext';
 
-const reports = [
-  {
-    id: 1111111111,
-    patientId: 1,
-    doctorId: 1,
-    reportDate: '11/1/2021 10:05:25',
-    reportStatus: 'Bekleniyor',
-  },
-  {
-    id: 2222222222,
-    patientId: 1,
-    doctorId: 1,
-    reportDate: '22/22/2020 10:05:25',
-    reportStatus: 'Bekleniyor',
-  },
-];
+// const reports = [
+//   {
+//     id: 1111111111,
+//     patientId: 1,
+//     doctorId: 1,
+//     reportDate: '11/1/2021 10:05:25',
+//     reportStatus: 'Bekleniyor',
+//   },
+//   {
+//     id: 2222222222,
+//     patientId: 1,
+//     doctorId: 1,
+//     reportDate: '22/22/2020 10:05:25',
+//     reportStatus: 'Bekleniyor',
+//   },
+// ];
 
 export const PatientReportsDoctorView = ({
   patient,
@@ -32,24 +33,28 @@ export const PatientReportsDoctorView = ({
   const [closeStrokeWidth, setCloseStrokeWidth] = useState(1.5);
   const [showReportDetails, setShowReportDetails] = useState(false);
   const [currentReportDetailsId, setCurrentReportDetailsId] = useState<number | undefined>();
+  const [reports, setReports] = useState([]);
+  const authContext = useContext(AuthContext);
+  useEffect(() => {
+    if (!showPatientReports) return;
+    fetch(`https://localhost:50198/api/report/patient/${patient?.id}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*',
+        Authorization: 'Bearer ' + authContext.token,
+      },
+    })
+      .then((response) => {
+        return response.json();
+      })
+      .then((data) => {
+        console.log('asd');
 
-  // useEffect(() => {
-  //   fetch('https://localhost:50198/api/report', {
-  //     method: 'GET',
-  //     headers: {
-  //       'Content-Type': 'application/json',
-  //       'Access-Control-Allow-Origin': '*',
-  //       Authorization: 'Bearer ' + authContext.token,
-  //     },
-  //   })
-  //     .then((response) => {
-  //       return response.json();
-  //     })
-  //     .then((data) => {
-  //       setAllPatients(data);
-  //       console.log(data);
-  //     });
-  // }, []);
+        setReports(data);
+        console.log(data);
+      });
+  }, [showPatientReports]);
   return (
     <>
       {showReportDetails ? (

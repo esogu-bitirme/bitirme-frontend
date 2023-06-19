@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { Patient } from '../types/patient';
 
 import ReportDetails from './ReportDetails';
@@ -38,6 +38,10 @@ export const PatientReportsDoctorView = ({
   const [currentReportDetails, setCurrentReportDetails] = useState<Report>();
   const [allReports, setAllReports] = useState(reports);
   const authContext = useContext(AuthContext);
+  const reportsEndRef = useRef(null);
+  const scrollToBottom = () => {
+    reportsEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
   useEffect(() => {
     if (!showPatientReports) return;
     fetch(`https://localhost:50198/api/report/patient/${patient?.id}`, {
@@ -52,10 +56,7 @@ export const PatientReportsDoctorView = ({
         return response.json();
       })
       .then((data) => {
-        console.log('asd');
-
         setAllReports(data);
-        console.log(data);
       });
   }, [showPatientReports]);
 
@@ -69,6 +70,40 @@ export const PatientReportsDoctorView = ({
     }
   };
 
+  const handleNewReport = (patientId: number) => {
+    const newReportBody = {
+      status: 0,
+      diagnosis: '',
+      description: '',
+      patientId: 10,
+    };
+    fetch(`https://localhost:50198/api/report`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*',
+        Authorization: 'Bearer ' + authContext.token,
+      },
+      body: JSON.stringify(newReportBody),
+    }).then(() => {
+      fetch(`https://localhost:50198/api/report/patient/${patient?.id}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
+          Authorization: 'Bearer ' + authContext.token,
+        },
+      })
+        .then((response) => {
+          return response.json();
+        })
+        .then((data) => {
+          setAllReports(data);
+          scrollToBottom();
+        });
+    });
+  };
+
   return (
     <>
       {showReportDetails ? (
@@ -77,6 +112,7 @@ export const PatientReportsDoctorView = ({
           showReportDetails={showReportDetails}
           setShowReportDetails={setShowReportDetails}
           setShowPatientReports={setShowPatientReports}
+          patient={patient}
         />
       ) : null}
 
@@ -120,15 +156,39 @@ export const PatientReportsDoctorView = ({
                 </svg>
               </button>
             </div>
-            <div className="m-3">
-              <p className="border-b text-xl font-bold">Raporlar</p>
+            <div className="flex w-full justify-between">
+              <div className="m-3">
+                <p className="border-b text-xl font-bold">Raporlar</p>
+              </div>
+              <div className="mr-10">
+                <button
+                  onClick={() => handleNewReport(patient?.id as number)}
+                  className=" flex w-full gap-2 rounded-lg  bg-indigo-600 px-3 py-1 text-center text-base font-semibold text-white shadow-md transition duration-200 ease-in hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2  focus:ring-offset-indigo-200 "
+                >
+                  Rapor Ekle
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="1.5"
+                    stroke="currentColor"
+                    className="h-6 w-6"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M12 4.5v15m7.5-7.5h-15"
+                    />
+                  </svg>
+                </button>
+              </div>
             </div>
             <div className="container mx-auto max-w-3xl px-4 sm:px-8">
               <div className="py-0">
                 <div className="-mx-4 overflow-x-auto px-4 py-4 sm:-mx-8 sm:px-8">
                   <div className="inline-block min-w-full overflow-hidden rounded-lg border">
                     <table className="min-w-full leading-normal">
-                      <thead>
+                      <thead className="table w-full table-fixed">
                         <tr>
                           <th
                             scope="col"
@@ -161,9 +221,9 @@ export const PatientReportsDoctorView = ({
                           ></th>
                         </tr>
                       </thead>
-                      <tbody>
+                      <tbody className="block max-h-80 overflow-y-scroll">
                         {allReports.map((report: Report) => (
-                          <tr>
+                          <tr className="table w-full table-fixed">
                             <td className="border-b border-gray-200 bg-white px-5 py-5 text-sm">
                               <div className="flex items-center">
                                 <div className="ml-3">
@@ -205,6 +265,9 @@ export const PatientReportsDoctorView = ({
                             </td>
                           </tr>
                         ))}
+                        <tr>
+                          <div ref={reportsEndRef} />
+                        </tr>
                       </tbody>
                     </table>
                   </div>

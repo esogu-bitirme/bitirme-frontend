@@ -1,19 +1,37 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { Image } from '../types/image';
 
 const ImageDetails = ({
   setShowImage,
   showImage,
   setShowReportDetails,
+  imageData,
 }: {
   showImage: boolean;
   setShowImage: React.Dispatch<React.SetStateAction<boolean>>;
   setShowReportDetails: React.Dispatch<React.SetStateAction<boolean>>;
+  imageData: Image | undefined;
 }) => {
   const [closeStrokeWidth, setCloseStrokeWidth] = useState(1.5);
+  useEffect(() => {
+    if (!showImage) {
+      return;
+    }
+    fetch(`https://localhost:50198/api/image/display/${imageData?.path}`)
+      .then((response) => {
+        console.log(response);
+
+        response.blob();
+      })
+      .then((blob) => {
+        console.log(blob);
+      });
+    console.log(imageData);
+  }, [showImage]);
   return (
     <>
       {showImage ? (
-        <div className="fixed bottom-0 left-0 right-0 top-0 z-10 flex h-screen w-screen items-center justify-center bg-zinc-800 bg-opacity-60">
+        <div className="fixed bottom-0 left-0 right-0 top-0 z-30 flex h-screen w-screen items-center justify-center bg-zinc-800 bg-opacity-60">
           <div className="flex max-w-3xl flex-col  rounded bg-white">
             <div className="w-full text-end">
               <button
@@ -41,8 +59,12 @@ const ImageDetails = ({
                 </svg>
               </button>
             </div>
-            <h2 className="pl-4">image name</h2>
-            <img className="h-auto max-h-96 p-4" src="./placeholder.PNG" alt="image name" />
+            <h2 className="pl-4">{imageData.name}</h2>
+            <img
+              className="h-auto max-h-96 p-4"
+              src={`https://localhost:50198/api/image/display/${imageData?.path}`}
+              alt="image name"
+            />
           </div>
         </div>
       ) : null}

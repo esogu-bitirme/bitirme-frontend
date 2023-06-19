@@ -1,30 +1,42 @@
-import React, { ChangeEvent, useState, useEffect } from 'react';
+import React, { ChangeEvent, useState, useEffect, useContext } from 'react';
 import ImageDetails from './ImageDetails';
+import { Report } from '../types/report';
+import AuthContext from '../context/AuthContext';
 
 const ReportDetails = ({
-  reportId,
+  report,
   showReportDetails,
   setShowReportDetails,
   setShowPatientReports,
 }: {
-  reportId: number | undefined;
+  report: Report | any;
   showReportDetails: boolean;
   setShowReportDetails: React.Dispatch<React.SetStateAction<boolean>>;
   setShowPatientReports: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
   const [thisShow, setThisShow] = useState(true);
-  const [reportid, setreportid] = useState(1);
   const [imageFile, setImageFile] = useState<File>();
   const [showImage, setShowImage] = useState(false);
   const [closeStrokeWidth, setCloseStrokeWidth] = useState(1.5);
+  const [description, setDescription] = useState(report.description);
+  const [diagnosis, setDiagnosis] = useState(report.diagnosis);
+  const authContext = useContext(AuthContext);
   let imageurl;
-  const current = new Date();
-  const date = `${current.getDate()}/${current.getMonth() + 1}/${current.getFullYear()}`;
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       setImageFile(e.target.files[0]);
     }
+  };
+
+  const handleDescription = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const inputValue = e.target.value;
+    setDescription(inputValue);
+  };
+
+  const handleDiagnosis = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const inputValue = e.target.value;
+    setDiagnosis(inputValue);
   };
 
   const handleUploadClick = () => {
@@ -56,6 +68,30 @@ const ReportDetails = ({
     //};
   };
 
+  const handleSaveClick = () => {
+    fetch('https://localhost:50198/api/report', {
+      method: 'PUT',
+      body: JSON.stringify({
+        id: report.id,
+        status: report.status,
+        diagnosis: diagnosis,
+        description: description,
+      }),
+      headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*',
+        Authorization: 'Bearer ' + authContext.token,
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+      })
+      .catch((err) => {
+        console.log(err.message);
+      });
+  };
+
   return (
     <>
       {showImage ? (
@@ -72,10 +108,10 @@ const ReportDetails = ({
               <div className="flex justify-between rounded-t-lg border-t-2 border-indigo-400 bg-white p-4 ">
                 <div>
                   <div className="mx-auto max-w-sm md:mx-0 md:w-full">
-                    Rapor Numarası : {reportId}
+                    Rapor Numarası : {report.id}
                   </div>
                   <div className="mx-auto max-w-sm md:mx-0 md:w-full">
-                    Rapor Oluşturma Tarihi : {date}
+                    Rapor Oluşturma Tarihi : {new Date(report.createDate).toLocaleString('en-GB')}
                   </div>
                 </div>
                 <button
@@ -129,7 +165,7 @@ const ReportDetails = ({
                       <tbody className="text-center">
                         <tr>
                           <td>{imageFile?.name}</td>
-                          <td>{date}</td>
+                          <td>date</td>
                           <td className="flex">
                             <button
                               type="button"
@@ -164,6 +200,8 @@ const ReportDetails = ({
                       id="user-info-phone"
                       className=" w-full flex-1 appearance-none rounded-lg border border-gray-300 border-transparent bg-white px-1 py-2 text-base text-gray-700 placeholder-gray-400 shadow-sm focus:border-transparent focus:outline-none focus:ring-2 focus:ring-purple-600"
                       placeholder="Teşhisinizi Giriniz"
+                      value={diagnosis}
+                      onChange={handleDiagnosis}
                     />
                   </div>
                 </div>
@@ -178,6 +216,8 @@ const ReportDetails = ({
                       rows={4}
                       className="w-full rounded-lg border border-gray-300 bg-gray-50 p-1 text-sm text-gray-900"
                       placeholder="Yorumunuzu Yazın"
+                      value={description}
+                      onChange={handleDescription}
                     ></textarea>
                   </div>
                 </div>
@@ -186,6 +226,7 @@ const ReportDetails = ({
                   <button
                     type="submit"
                     className="w-full rounded-lg  bg-blue-600 px-4 py-2 text-center font-semibold text-white transition duration-200 ease-in hover:bg-blue-700 "
+                    onClick={handleSaveClick}
                   >
                     Save
                   </button>

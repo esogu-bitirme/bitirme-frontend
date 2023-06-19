@@ -3,6 +3,7 @@ import { Patient } from '../types/patient';
 
 import ReportDetails from './ReportDetails';
 import AuthContext from '../context/AuthContext';
+import { Report } from '../types/report';
 
 // const reports = [
 //   {
@@ -21,6 +22,8 @@ import AuthContext from '../context/AuthContext';
 //   },
 // ];
 
+const reports: Array<Report> = [];
+
 export const PatientReportsDoctorView = ({
   patient,
   setShowPatientReports,
@@ -32,8 +35,8 @@ export const PatientReportsDoctorView = ({
 }) => {
   const [closeStrokeWidth, setCloseStrokeWidth] = useState(1.5);
   const [showReportDetails, setShowReportDetails] = useState(false);
-  const [currentReportDetailsId, setCurrentReportDetailsId] = useState<number | undefined>();
-  const [reports, setReports] = useState([]);
+  const [currentReportDetails, setCurrentReportDetails] = useState<Report>();
+  const [allReports, setAllReports] = useState(reports);
   const authContext = useContext(AuthContext);
   useEffect(() => {
     if (!showPatientReports) return;
@@ -51,7 +54,7 @@ export const PatientReportsDoctorView = ({
       .then((data) => {
         console.log('asd');
 
-        setReports(data);
+        setAllReports(data);
         console.log(data);
       });
   }, [showPatientReports]);
@@ -59,7 +62,7 @@ export const PatientReportsDoctorView = ({
     <>
       {showReportDetails ? (
         <ReportDetails
-          reportId={currentReportDetailsId}
+          report={currentReportDetails}
           showReportDetails={showReportDetails}
           setShowReportDetails={setShowReportDetails}
           setShowPatientReports={setShowPatientReports}
@@ -148,113 +151,49 @@ export const PatientReportsDoctorView = ({
                         </tr>
                       </thead>
                       <tbody>
-                        {reports
-                          ? reports.map((report) => (
-                              <tr>
-                                <td className="border-b border-gray-200 bg-white px-5 py-5 text-sm">
-                                  <div className="flex items-center">
-                                    <div className="ml-3">
-                                      <p className="whitespace-no-wrap text-gray-900">
-                                        {report.id}
-                                      </p>
-                                    </div>
-                                  </div>
-                                </td>
-                                <td className="border-b border-gray-200 bg-white px-5 py-5 text-sm">
-                                  <p className="whitespace-no-wrap text-gray-900">
-                                    {patient?.name}
-                                  </p>
-                                </td>
-                                <td className="border-b border-gray-200 bg-white px-5 py-5 text-sm">
-                                  <p className="whitespace-no-wrap text-gray-900">
-                                    {report.reportDate}
-                                  </p>
-                                </td>
-                                <td className="border-b border-gray-200 bg-white px-5 py-5 text-sm">
-                                  <span className="relative inline-block px-3 py-1 font-semibold leading-tight text-yellow-900">
-                                    <span
-                                      aria-hidden="true"
-                                      className="absolute inset-0 rounded-full bg-yellow-200 opacity-50"
-                                    ></span>
-                                    <span className="relative">{report.status}</span>
-                                  </span>
-                                </td>
-                                <td className="border-b border-gray-200 bg-white px-5 py-5 text-sm">
-                                  <a
-                                    href="#"
-                                    className="text-indigo-600 hover:text-indigo-900"
-                                    onClick={() => {
-                                      setCurrentReportDetailsId(report.id);
-                                      setShowPatientReports(false);
-                                      setShowReportDetails(true);
-                                    }}
-                                  >
-                                    Görüntüle
-                                  </a>
-                                </td>
-                              </tr>
-                            ))
-                          : null}
+                        {allReports.map((report: Report) => (
+                          <tr>
+                            <td className="border-b border-gray-200 bg-white px-5 py-5 text-sm">
+                              <div className="flex items-center">
+                                <div className="ml-3">
+                                  <p className="whitespace-no-wrap text-gray-900">{report.id}</p>
+                                </div>
+                              </div>
+                            </td>
+                            <td className="border-b border-gray-200 bg-white px-5 py-5 text-sm">
+                              <p className="whitespace-no-wrap text-gray-900">{patient?.name}</p>
+                            </td>
+                            <td className="border-b border-gray-200 bg-white px-5 py-5 text-sm">
+                              <p className="whitespace-no-wrap text-gray-900">
+                                {new Date(report.updateDate).toLocaleString('en-GB')}
+                              </p>
+                            </td>
+                            <td className="border-b border-gray-200 bg-white px-5 py-5 text-sm">
+                              <span className="relative inline-block px-3 py-1 font-semibold leading-tight text-yellow-900">
+                                <span
+                                  aria-hidden="true"
+                                  className="absolute inset-0 rounded-full bg-yellow-200 opacity-50"
+                                ></span>
+                                <span className="relative">{report.status}</span>
+                              </span>
+                            </td>
+                            <td className="border-b border-gray-200 bg-white px-5 py-5 text-sm">
+                              <a
+                                href="#"
+                                className="text-indigo-600 hover:text-indigo-900"
+                                onClick={() => {
+                                  setCurrentReportDetails(report);
+                                  setShowPatientReports(false);
+                                  setShowReportDetails(true);
+                                }}
+                              >
+                                Görüntüle
+                              </a>
+                            </td>
+                          </tr>
+                        ))}
                       </tbody>
                     </table>
-                    <div className="xs:flex-row xs:justify-between flex flex-col items-center bg-white px-5 py-5">
-                      <div className="flex items-center">
-                        <button
-                          type="button"
-                          className="w-full rounded-l-xl border bg-white p-4 text-base text-gray-600 hover:bg-gray-100"
-                        >
-                          <svg
-                            width="9"
-                            fill="currentColor"
-                            height="8"
-                            className=""
-                            viewBox="0 0 1792 1792"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <path d="M1427 301l-531 531 531 531q19 19 19 45t-19 45l-166 166q-19 19-45 19t-45-19l-742-742q-19-19-19-45t19-45l742-742q19-19 45-19t45 19l166 166q19 19 19 45t-19 45z"></path>
-                          </svg>
-                        </button>
-                        <button
-                          type="button"
-                          className="w-full border-b border-t bg-white px-4 py-2 text-base text-indigo-500 hover:bg-gray-100 "
-                        >
-                          1
-                        </button>
-                        <button
-                          type="button"
-                          className="w-full border bg-white px-4 py-2 text-base text-gray-600 hover:bg-gray-100"
-                        >
-                          2
-                        </button>
-                        <button
-                          type="button"
-                          className="w-full border-b border-t bg-white px-4 py-2 text-base text-gray-600 hover:bg-gray-100"
-                        >
-                          3
-                        </button>
-                        <button
-                          type="button"
-                          className="w-full border bg-white px-4 py-2 text-base text-gray-600 hover:bg-gray-100"
-                        >
-                          4
-                        </button>
-                        <button
-                          type="button"
-                          className="w-full rounded-r-xl border-b border-r border-t bg-white p-4 text-base text-gray-600 hover:bg-gray-100"
-                        >
-                          <svg
-                            width="9"
-                            fill="currentColor"
-                            height="8"
-                            className=""
-                            viewBox="0 0 1792 1792"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <path d="M1363 877l-742 742q-19 19-45 19t-45-19l-166-166q-19-19-19-45t19-45l531-531-531-531q-19-19-19-45t19-45l166-166q19-19 45-19t45 19l742 742q19 19 19 45t-19 45z"></path>
-                          </svg>
-                        </button>
-                      </div>
-                    </div>
                   </div>
                 </div>
               </div>

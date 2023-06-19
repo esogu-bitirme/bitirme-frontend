@@ -18,13 +18,14 @@ const ReportDetails = ({
   setShowPatientReports: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
   const [thisShow, setThisShow] = useState(true);
-  const [imageFile, setImageFile] = useState<File>();
+  const [imageFile, setImageFile] = useState<any>();
   const [showImage, setShowImage] = useState(false);
   const [closeStrokeWidth, setCloseStrokeWidth] = useState(1.5);
   const [description, setDescription] = useState(report.description);
   const [diagnosis, setDiagnosis] = useState(report.diagnosis);
   const authContext = useContext(AuthContext);
   const [allImages, setAllImages] = useState(images);
+
   let imageurl;
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -116,6 +117,27 @@ const ReportDetails = ({
       });
   };
 
+  const saveImageToFolder = () => {
+    const formData = new FormData();
+    formData.append('file', imageFile);
+
+    fetch(`https://localhost:50198/api/image/save-image`, {
+      method: 'POST',
+      body: formData,
+      headers: {
+        'Content-Type': 'multipart/form-data; boundary=----WebKitFormBoundaryexampleboundary',
+        'Access-Control-Allow-Origin': '*',
+        Authorization: 'Bearer ' + authContext.token,
+      },
+    })
+      .then((response) => {
+        return response.json();
+      })
+      .then((data) => {
+        console.log(data);
+      });
+  };
+
   return (
     <>
       {showImage ? (
@@ -169,7 +191,7 @@ const ReportDetails = ({
                     <h2 className="flex max-w-sm font-bold text-black  ">Görseller</h2>
                     <button
                       className="max-w-sm rounded-md bg-blue-500 p-2 text-right text-sm font-medium text-black"
-                      onClick={handleUploadClick}
+                      onClick={saveImageToFolder}
                     >
                       Görsel Yükle
                     </button>

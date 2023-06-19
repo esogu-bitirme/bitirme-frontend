@@ -58,6 +58,17 @@ export const PatientReportsDoctorView = ({
         console.log(data);
       });
   }, [showPatientReports]);
+
+  const getStatusText = (status: Status) => {
+    if (status === 0) {
+      return 'Bekleniyor';
+    } else if (status === 1) {
+      return 'Onaylandı';
+    } else {
+      return 'Bilinmeyen Durum';
+    }
+  };
+
   return (
     <>
       {showReportDetails ? (
@@ -161,7 +172,9 @@ export const PatientReportsDoctorView = ({
                               </div>
                             </td>
                             <td className="border-b border-gray-200 bg-white px-5 py-5 text-sm">
-                              <p className="whitespace-no-wrap text-gray-900">{patient?.name}</p>
+                              <p className="whitespace-no-wrap text-gray-900">
+                                {patient?.name} {patient?.surname}
+                              </p>
                             </td>
                             <td className="border-b border-gray-200 bg-white px-5 py-5 text-sm">
                               <p className="whitespace-no-wrap text-gray-900">
@@ -174,7 +187,7 @@ export const PatientReportsDoctorView = ({
                                   aria-hidden="true"
                                   className="absolute inset-0 rounded-full bg-yellow-200 opacity-50"
                                 ></span>
-                                <span className="relative">{report.status}</span>
+                                <span className="relative">{getStatusText(report.status)}</span>
                               </span>
                             </td>
                             <td className="border-b border-gray-200 bg-white px-5 py-5 text-sm">

@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useContext, useState } from 'react';
 import { Patient } from '../types/patient';
+import AuthContext from '../context/AuthContext';
 
 export const PatientListItem = ({
   patient,
@@ -10,6 +11,24 @@ export const PatientListItem = ({
   setPatientReportsView: React.Dispatch<React.SetStateAction<Patient | undefined>>;
   setShowPatientReports: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
+  const authContext = useContext(AuthContext);
+
+  const handleDeletePatient = () => {
+    fetch(`https://localhost:50198/api/doctor/patient/${patient.id}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*',
+        Authorization: 'Bearer ' + authContext.token,
+      },
+    })
+      .then((response) => {
+        return response.json();
+      })
+      .then((data) => {
+        console.log(data);
+      });
+  };
   return (
     <tr>
       <td className="border-b border-gray-200 bg-white px-5 py-5 text-sm">
@@ -34,13 +53,20 @@ export const PatientListItem = ({
       <td className="border-b border-gray-200 bg-white px-5 py-5 text-sm">
         <button
           type="button"
-          className="w-full rounded-lg  bg-indigo-600 px-3 py-1 text-center text-base font-semibold text-white shadow-md transition duration-200 ease-in hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2  focus:ring-offset-indigo-200 "
+          className="w-1/2 rounded-lg  bg-indigo-600 px-3 py-1 text-center text-base font-semibold text-white shadow-md transition duration-200 ease-in hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2  focus:ring-offset-indigo-200 "
           onClick={() => {
             setShowPatientReports(true);
             setPatientReportsView(patient);
           }}
         >
           Görüntüle
+        </button>
+        <button
+          type="button"
+          className="w-1/2 rounded-lg  bg-red-600 px-3 py-1 text-center text-base font-semibold text-white shadow-md transition duration-200 ease-in hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2  focus:ring-offset-red-200 "
+          onClick={handleDeletePatient}
+        >
+          Sil
         </button>
       </td>
     </tr>

@@ -2,6 +2,9 @@ import React, { ChangeEvent, useState, useEffect, useContext } from 'react';
 import ImageDetails from './ImageDetails';
 import { Report } from '../types/report';
 import AuthContext from '../context/AuthContext';
+import { ImageListItem } from './ImageListItem';
+
+const images: any = [];
 
 const ReportDetails = ({
   report,
@@ -21,6 +24,7 @@ const ReportDetails = ({
   const [description, setDescription] = useState(report.description);
   const [diagnosis, setDiagnosis] = useState(report.diagnosis);
   const authContext = useContext(AuthContext);
+  const [allImages, setAllImages] = useState(images);
   let imageurl;
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -68,6 +72,24 @@ const ReportDetails = ({
     //};
   };
 
+  useEffect(() => {
+    fetch(`https://localhost:50198/api/image/report/${report.id}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*',
+        Authorization: 'Bearer ' + authContext.token,
+      },
+    })
+      .then((response) => {
+        return response.json();
+      })
+      .then((data) => {
+        setAllImages(data);
+        console.log(data);
+      });
+  }, []);
+
   const handleSaveClick = () => {
     fetch('https://localhost:50198/api/report', {
       method: 'PUT',
@@ -86,6 +108,8 @@ const ReportDetails = ({
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
+        setShowPatientReports(true);
+        setShowReportDetails(false);
       })
       .catch((err) => {
         console.log(err.message);
@@ -158,33 +182,14 @@ const ReportDetails = ({
                       <thead className="w-full border-b-2 text-center">
                         <tr>
                           <td className="w-1/3 text-black">Görsel Adı</td>
-                          <td className="w-1/3 text-black">Yüklenme Tarihi</td>
+                          <td className="w-1/3 text-black">Görsel Açıklaması</td>
                           <td className="w-1/3 text-black">Düzenleme</td>
                         </tr>
                       </thead>
                       <tbody className="text-center">
-                        <tr>
-                          <td>{imageFile?.name}</td>
-                          <td>date</td>
-                          <td className="flex">
-                            <button
-                              type="button"
-                              className="mr-1 flex w-1/2 items-center justify-center rounded-lg  bg-red-600 px-3 py-1 text-center font-semibold text-white transition hover:bg-red-700 "
-                            >
-                              Sil
-                            </button>
-                            <button
-                              type="button"
-                              className="w-1/2 rounded-lg  bg-indigo-600 px-3 py-1 text-center font-semibold text-white  transition ease-in  hover:bg-indigo-700 "
-                              onClick={() => {
-                                setThisShow(false);
-                                setShowImage(true);
-                              }}
-                            >
-                              Görüntüle
-                            </button>
-                          </td>
-                        </tr>
+                        {allImages.map((image: any) => (
+                          <ImageListItem image={image} />
+                        ))}
                       </tbody>
                     </table>
                   </div>

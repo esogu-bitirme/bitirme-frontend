@@ -23,7 +23,6 @@ export const MyReports = () => {
       })
       .then((data) => {
         setAllReports(data);
-        console.log(data);
       })
       .catch((e) => {
         toast.error('Bir hata meydana geldi!', {
@@ -84,8 +83,8 @@ export const MyReports = () => {
                 </tr>
               </thead>
               <tbody>
-                {allReports.map((report: any) => (
-                  <ReportListItem report={report} />
+                {allReports.map((report: any, index: number) => (
+                  <ReportListItem key={index} report={report} />
                 ))}
               </tbody>
             </table>

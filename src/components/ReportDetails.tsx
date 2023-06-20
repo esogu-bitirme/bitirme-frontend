@@ -64,7 +64,6 @@ const ReportDetails = ({
           patientId: patientId,
           reportId: reportId,
         };
-        console.log(JSON.stringify(imageBody));
 
         fetch(`https://localhost:50198/api/image`, {
           method: 'POST',
@@ -76,7 +75,6 @@ const ReportDetails = ({
           },
         })
           .then((response) => {
-            console.log(response);
             fetch(`https://localhost:50198/api/image/report/${reportId}`, {
               method: 'GET',
               headers: {
@@ -269,8 +267,9 @@ const ReportDetails = ({
                         </tr>
                       </thead>
                       <tbody className="block max-h-48 overflow-y-scroll">
-                        {allImages.map((image: any) => (
+                        {allImages.map((image: any, index: number) => (
                           <ImageListItem
+                            key={index}
                             image={image}
                             setShowImage={setShowImage}
                             setThisShow={setThisShow}

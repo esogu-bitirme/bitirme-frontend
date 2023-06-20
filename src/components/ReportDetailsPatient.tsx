@@ -20,7 +20,6 @@ const ReportDetailsPatient = ({
   const [closeStrokeWidth, setCloseStrokeWidth] = useState(1.5);
   const [currentImage, setCurrentImage] = useState<Image | null>(null);
   useEffect(() => {
-    console.log(report);
     fetch('https://localhost:50198/api/image/report/' + report.id, {
       method: 'GET',
       headers: {
@@ -30,7 +29,6 @@ const ReportDetailsPatient = ({
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
         setAllImages(data);
       });
   }, []);

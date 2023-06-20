@@ -26,19 +26,16 @@ const ImageDetails = ({
     }
     fetch(`https://localhost:50198/api/image/display/${imageData?.path}`)
       .then((response) => {
-        console.log(response);
 
         response.blob();
       })
       .then((blob) => {
-        console.log(blob);
       })
       .catch((e) => {
         toast.error('Bir hata meydana geldi!', {
           position: toast.POSITION.TOP_RIGHT,
         });
       });
-    console.log(imageData);
   }, [showImage]);
 
   const handlePredict = () => {
@@ -47,11 +44,9 @@ const ImageDetails = ({
       method: 'GET',
     })
       .then((response) => {
-        console.log(response);
         return response.json();
       })
       .then((data) => {
-        console.log(data);
         setPredict(data);
         setIsLoading(false);
       })

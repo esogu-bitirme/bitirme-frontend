@@ -8,9 +8,7 @@ import ReportDetailsPatient from './ReportDetailsPatient';
 export const ReportListItem = ({ report }: { report: Report }) => {
   const [showReportDetails, setShowReportDetails] = useState(false);
   const [currentReportDetails, setCurrentReportDetails] = useState<Report>();
-  useEffect(() => {
-    console.log(report);
-  }, []);
+  
 
   const getStatusText = (status: Status) => {
     if (status === 0) {

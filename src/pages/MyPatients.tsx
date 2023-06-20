@@ -28,7 +28,6 @@ export const MyPatients = () => {
       })
       .then((data) => {
         setAllPatients(data);
-        console.log(data);
       })
       .catch((e) => {
         toast.error('Bir hata meydana geldi!', {
@@ -47,8 +46,6 @@ export const MyPatients = () => {
       },
     })
       .then((response) => {
-        console.log(response);
-
         return response.json();
       })
       .then((data) => {

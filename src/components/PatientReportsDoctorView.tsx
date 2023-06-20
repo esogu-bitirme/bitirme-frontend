@@ -170,15 +170,11 @@ export const PatientReportsDoctorView = ({
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
                     viewBox="0 0 24 24"
-                    stroke-width="1.5"
+                    strokeWidth="1.5"
                     stroke="currentColor"
                     className="h-6 w-6"
                   >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      d="M12 4.5v15m7.5-7.5h-15"
-                    />
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
                   </svg>
                 </button>
               </div>
@@ -222,8 +218,8 @@ export const PatientReportsDoctorView = ({
                         </tr>
                       </thead>
                       <tbody className="block max-h-80 overflow-y-scroll">
-                        {allReports.map((report: Report) => (
-                          <tr className="table w-full table-fixed">
+                        {allReports.map((report: Report, index: number) => (
+                          <tr className="table w-full table-fixed" key={index}>
                             <td className="border-b border-gray-200 bg-white px-5 py-5 text-sm">
                               <div className="flex items-center">
                                 <div className="ml-3">
@@ -266,7 +262,9 @@ export const PatientReportsDoctorView = ({
                           </tr>
                         ))}
                         <tr>
-                          <div ref={reportsEndRef} />
+                          <td>
+                            <div ref={reportsEndRef} />
+                          </td>
                         </tr>
                       </tbody>
                     </table>

@@ -26,7 +26,7 @@ export const PatientListItem = ({
         return response.json();
       })
       .then((data) => {
-        console.log(data);
+        location.reload();
       });
   };
   return (

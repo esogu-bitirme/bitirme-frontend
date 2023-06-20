@@ -41,10 +41,12 @@ export const MyPatients = () => {
       },
     })
       .then((response) => {
+        console.log(response);
+
         return response.json();
       })
       .then((data) => {
-        setAllPatients(data);
+        location.reload();
         console.log(data);
       });
   };
@@ -148,13 +150,15 @@ export const MyPatients = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {allPatients.map((patient: any) => (
-                    <PatientListItem
-                      patient={patient}
-                      setPatientReportsView={setPatientReportsView}
-                      setShowPatientReports={setShowPatientReports}
-                    />
-                  ))}
+                  {allPatients
+                    ? allPatients.map((patient: any) => (
+                        <PatientListItem
+                          patient={patient}
+                          setPatientReportsView={setPatientReportsView}
+                          setShowPatientReports={setShowPatientReports}
+                        />
+                      ))
+                    : null}
                 </tbody>
               </table>
             </div>

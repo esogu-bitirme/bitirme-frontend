@@ -35,7 +35,6 @@ function Register() {
   };
 
   const datecheck = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log;
     const inputValue = new Date(e.target.value);
     const currentDate = new Date();
     if (inputValue < currentDate) {
@@ -96,7 +95,6 @@ function Register() {
   };
 
   const registerAsPatient = () => {
-    console.log(date);
     fetch('https://localhost:50198/api/patient', {
       method: 'POST',
       headers: {

@@ -26,11 +26,9 @@ const ImageDetails = ({
     }
     fetch(`https://localhost:50198/api/image/display/${imageData?.path}`)
       .then((response) => {
-
         response.blob();
       })
-      .then((blob) => {
-      })
+      .then((blob) => {})
       .catch((e) => {
         toast.error('Bir hata meydana geldi!', {
           position: toast.POSITION.TOP_RIGHT,
@@ -123,19 +121,19 @@ const ImageDetails = ({
                                 fill="currentFill"
                               />
                             </svg>
-                            <span class="sr-only">Loading...</span>
+                            <span className="sr-only">Loading...</span>
                           </div>
                         </div>
                       ) : (
-                        'Modele Gönder'
+                        'Teşhis Et!'
                       )}
                     </button>
 
                     {predict && (
                       <div>
                         <b>Tahmin sonuçları : </b> <hr></hr>
-                        Benign: %{(predict?.benign * 100).toFixed(2)} <br></br>
-                        Malignant: %{(predict?.malignant * 100).toFixed(2)} <br></br>
+                        İyi Huylu: %{(predict?.benign * 100).toFixed(2)} <br></br>
+                        Kötü Huylu: %{(predict?.malignant * 100).toFixed(2)} <br></br>
                         Normal: %{(predict?.normal * 100).toFixed(2)} <br></br>
                       </div>
                     )}

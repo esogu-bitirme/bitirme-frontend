@@ -2,6 +2,8 @@ import React, { ChangeEvent, useState, useEffect } from 'react';
 import ImageDetails from './ImageDetails';
 import { Report } from '../types/report';
 import { ToastContainer, toast } from 'react-toastify';
+import { Image } from '../types/image';
+import { ImageListItem } from './ImageListItem';
 
 const ReportDetailsPatient = ({
   report,
@@ -13,11 +15,25 @@ const ReportDetailsPatient = ({
   setShowReportDetails: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
   const [thisShow, setThisShow] = useState(true);
-  const [imageFile, setImageFile] = useState<File>();
   const [showImage, setShowImage] = useState(false);
+  const [allImages, setAllImages] = useState<Image[] | undefined>();
   const [closeStrokeWidth, setCloseStrokeWidth] = useState(1.5);
-  let imageurl;
-
+  const [currentImage, setCurrentImage] = useState<Image | null>(null);
+  useEffect(() => {
+    console.log(report);
+    fetch('https://localhost:50198/api/image/report/' + report.id, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + localStorage.getItem('token'),
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+        setAllImages(data);
+      });
+  }, []);
   return (
     <>
       {showImage ? (
@@ -72,31 +88,25 @@ const ReportDetailsPatient = ({
                   </div>
 
                   <div className="max-w">
-                    <table className="w-full">
-                      <thead className="w-full border-b-2 text-center">
+                    <table className="w-full min-w-full leading-normal">
+                      <thead className="table w-full table-fixed border-b-2 text-center">
                         <tr>
                           <td className="w-1/3 text-black">Görsel Adı</td>
-                          <td className="w-1/3 text-black">Yüklenme Tarihi</td>
+                          <td className="w-1/3 text-black">Açıklama</td>
                           <td className="w-1/3 text-black">Düzenleme</td>
                         </tr>
                       </thead>
-                      <tbody className="text-center">
-                        <tr>
-                          <td>image name</td>
-                          <td>{}</td>
-                          <td className="flex justify-end">
-                            <button
-                              type="button"
-                              className="w-1/2 rounded-lg  bg-blue-600 px-3 py-1 text-center font-semibold text-white  transition ease-in  hover:bg-blue-700"
-                              onClick={() => {
-                                setThisShow(false);
-                                setShowImage(true);
-                              }}
-                            >
-                              Görüntüle
-                            </button>
-                          </td>
-                        </tr>
+                      <tbody className="block max-h-48 overflow-y-scroll">
+                        {allImages?.map((image) => (
+                          <ImageListItem
+                            image={image}
+                            setShowImage={setShowImage}
+                            setThisShow={setThisShow}
+                            reportId={report.id}
+                            setAllImages={null}
+                            setCurrentImage={setCurrentImage}
+                          />
+                        ))}
                       </tbody>
                     </table>
                   </div>
@@ -110,7 +120,7 @@ const ReportDetailsPatient = ({
                     <input
                       type="text"
                       id="user-info-phone"
-                      className=" w-full flex-1 appearance-none rounded-lg border border-gray-300 border-transparent bg-white px-1 py-2 text-base text-gray-700 placeholder-gray-400 shadow-sm focus:border-transparent focus:outline-none focus:ring-2 focus:ring-purple-600"
+                      className=" w-full flex-1 appearance-none rounded-lg border border-gray-300 bg-white px-1 py-2 text-base text-gray-700 placeholder-gray-400 shadow-sm focus:border-transparent focus:outline-none focus:ring-2 focus:ring-purple-600"
                       value={report?.diagnosis}
                       disabled
                     />

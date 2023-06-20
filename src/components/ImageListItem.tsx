@@ -14,7 +14,7 @@ export const ImageListItem = ({
   setThisShow: React.Dispatch<React.SetStateAction<boolean>>;
   setShowImage: React.Dispatch<React.SetStateAction<boolean>>;
   setCurrentImage: React.Dispatch<React.SetStateAction<any>>;
-  setAllImages: React.Dispatch<React.SetStateAction<Image[]>>;
+  setAllImages: React.Dispatch<React.SetStateAction<Image[]>> | null;
   reportId: number;
 }) => {
   const handleDelete = () => {
@@ -63,17 +63,19 @@ export const ImageListItem = ({
       <tr className="table w-full table-fixed border-b text-center">
         <td>{image.name}</td>
         <td>{image.description}</td>
-        <td className="flex">
+        <td className="flex items-center justify-center">
+          {setAllImages ? (
+            <button
+              type="button"
+              className="mr-1  w-1/2   rounded-lg bg-red-600  px-2  py-1 text-center text-xs font-semibold text-white transition hover:bg-red-700 "
+              onClick={handleDelete}
+            >
+              Sil
+            </button>
+          ) : null}
           <button
             type="button"
-            className="mr-1  w-1/2   rounded-lg bg-red-600  px-2 py-1 text-center text-sm font-semibold text-white transition hover:bg-red-700 "
-            onClick={handleDelete}
-          >
-            Sil
-          </button>
-          <button
-            type="button"
-            className="w-1/2 rounded-lg  bg-blue-600 px-3 py-1 text-center text-xs font-semibold text-white  transition ease-in  hover:bg-blue-700 "
+            className={`w-1/2 rounded-lg  bg-blue-600 px-2  py-1 text-center text-xs font-semibold text-white  transition ease-in  hover:bg-blue-700 `}
             onClick={() => {
               // setThisShow(false);
               setShowImage(true);

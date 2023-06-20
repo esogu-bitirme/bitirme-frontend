@@ -18,8 +18,6 @@ export const Login = () => {
       navigate('/patients');
     } else if (authContext.userType === 'PATIENT') {
       navigate('/reports');
-    } else {
-      console.error('Unknown user type');
     }
   }, [authContext.userType]);
 

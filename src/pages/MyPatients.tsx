@@ -139,8 +139,9 @@ export const MyPatients = () => {
                 </thead>
                 <tbody>
                   {allPatients
-                    ? allPatients.map((patient: any) => (
+                    ? allPatients.map((patient: any, index: number) => (
                         <PatientListItem
+                          key={index}
                           patient={patient}
                           setPatientReportsView={setPatientReportsView}
                           setShowPatientReports={setShowPatientReports}

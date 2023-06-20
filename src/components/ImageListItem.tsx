@@ -1,5 +1,6 @@
 import React from 'react';
 import { Image } from '../types/image';
+import { ToastContainer, toast } from 'react-toastify';
 
 export const ImageListItem = ({
   image,
@@ -44,12 +45,22 @@ export const ImageListItem = ({
           })
           .then((data) => {
             setAllImages(data);
+          })
+          .catch((e) => {
+            toast.error('Bir hata meydana geldi!', {
+              position: toast.POSITION.TOP_RIGHT,
+            });
           });
+      })
+      .catch((e) => {
+        toast.error('Bir hata meydana geldi!', {
+          position: toast.POSITION.TOP_RIGHT,
+        });
       });
   };
   return (
     <>
-      <tr className="table w-full table-fixed border-b">
+      <tr className="table w-full table-fixed border-b text-center">
         <td>{image.name}</td>
         <td>{image.description}</td>
         <td className="flex">
@@ -62,7 +73,7 @@ export const ImageListItem = ({
           </button>
           <button
             type="button"
-            className="w-1/2 rounded-lg  bg-indigo-600 px-3 py-1 text-center text-xs font-semibold text-white  transition ease-in  hover:bg-indigo-700 "
+            className="w-1/2 rounded-lg  bg-blue-600 px-3 py-1 text-center text-xs font-semibold text-white  transition ease-in  hover:bg-blue-700 "
             onClick={() => {
               // setThisShow(false);
               setShowImage(true);

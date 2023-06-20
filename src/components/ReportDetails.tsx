@@ -4,6 +4,7 @@ import { Report } from '../types/report';
 import AuthContext from '../context/AuthContext';
 import { ImageListItem } from './ImageListItem';
 import { Patient } from '../types/patient';
+import { ToastContainer, toast } from 'react-toastify';
 
 const images: any = [];
 
@@ -73,26 +74,42 @@ const ReportDetails = ({
             Authorization: 'Bearer ' + authContext.token,
             'Content-Type': 'application/json',
           },
-        }).then((response) => {
-          console.log(response);
-          fetch(`https://localhost:50198/api/image/report/${reportId}`, {
-            method: 'GET',
-            headers: {
-              'Content-Type': 'application/json',
-              'Access-Control-Allow-Origin': '*',
-              Authorization: 'Bearer ' + localStorage.getItem('token'),
-            },
-          })
-            .then((response) => {
-              if (!response.ok) {
-                setAllImages([]); // TODO : fix this
-                throw new Error('Network response was not ok');
-              }
-              return response.json();
+        })
+          .then((response) => {
+            console.log(response);
+            fetch(`https://localhost:50198/api/image/report/${reportId}`, {
+              method: 'GET',
+              headers: {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*',
+                Authorization: 'Bearer ' + localStorage.getItem('token'),
+              },
             })
-            .then((data) => {
-              setAllImages(data);
+              .then((response) => {
+                if (!response.ok) {
+                  setAllImages([]); // TODO : fix this
+                  throw new Error('Network response was not ok');
+                }
+                return response.json();
+              })
+              .then((data) => {
+                setAllImages(data);
+              })
+              .catch((e) => {
+                toast.error('Bir hata meydana geldi!', {
+                  position: toast.POSITION.TOP_RIGHT,
+                });
+              });
+          })
+          .catch((e) => {
+            toast.error('Bir hata meydana geldi!', {
+              position: toast.POSITION.TOP_RIGHT,
             });
+          });
+      })
+      .catch((e) => {
+        toast.error('Bir hata meydana geldi!', {
+          position: toast.POSITION.TOP_RIGHT,
         });
       });
   };
@@ -121,18 +138,24 @@ const ReportDetails = ({
       })
       .then((data) => {
         setAllImages(data);
+      })
+      .catch((e) => {
+        toast.error('Bir hata meydana geldi!', {
+          position: toast.POSITION.TOP_RIGHT,
+        });
       });
   }, []);
 
   const handleSaveClick = () => {
+    const updateReport = {
+      id: report.id,
+      status: report.status,
+      diagnosis: diagnosis,
+      description: description,
+    };
     fetch('https://localhost:50198/api/report', {
       method: 'PUT',
-      body: JSON.stringify({
-        id: report.id,
-        status: report.status,
-        diagnosis: diagnosis,
-        description: description,
-      }),
+      body: JSON.stringify(updateReport),
       headers: {
         'Content-Type': 'application/json',
         'Access-Control-Allow-Origin': '*',
@@ -141,10 +164,17 @@ const ReportDetails = ({
     })
       .then((response) => response.json())
       .then((data) => {
+        toast.success('Başarıyla kayıt edildi!', {
+          position: toast.POSITION.TOP_RIGHT,
+        });
         setShowPatientReports(true);
         setShowReportDetails(false);
       })
-      .catch((err) => {});
+      .catch((e) => {
+        toast.error('Bir hata meydana geldi!', {
+          position: toast.POSITION.TOP_RIGHT,
+        });
+      });
   };
 
   return (
@@ -217,7 +247,7 @@ const ReportDetails = ({
                         </p>
                       </div>
                       <button
-                        className="max-w-sm rounded-md bg-blue-500 p-2 text-right text-sm font-medium text-black"
+                        className="max-w-sm rounded-lg  bg-blue-600 px-4 py-2 text-center font-semibold text-white transition duration-200 ease-in hover:bg-blue-700 "
                         onClick={() => {
                           uploadImageToServer(patient?.id, report.id);
                         }}

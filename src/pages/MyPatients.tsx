@@ -3,6 +3,7 @@ import { PatientListItem } from '../components/PatientListItem';
 import { PatientReportsDoctorView } from '../components/PatientReportsDoctorView';
 import { Patient } from '../types/patient';
 import AuthContext from '../context/AuthContext';
+import { ToastContainer, toast } from 'react-toastify';
 
 const patients: any = [];
 
@@ -28,6 +29,11 @@ export const MyPatients = () => {
       .then((data) => {
         setAllPatients(data);
         console.log(data);
+      })
+      .catch((e) => {
+        toast.error('Bir hata meydana geldi!', {
+          position: toast.POSITION.TOP_RIGHT,
+        });
       });
   }, []);
 
@@ -47,7 +53,14 @@ export const MyPatients = () => {
       })
       .then((data) => {
         location.reload();
-        console.log(data);
+        toast.success('Hasta başarıyla eklendi!', {
+          position: toast.POSITION.TOP_RIGHT,
+        });
+      })
+      .catch((e) => {
+        toast.error('Bir hata meydana geldi!', {
+          position: toast.POSITION.TOP_RIGHT,
+        });
       });
   };
 
@@ -86,31 +99,6 @@ export const MyPatients = () => {
                     Hasta Ekle
                   </button>
                 </div>
-              </div>
-
-              <div>
-                <form className="flex w-3/4 max-w-md flex-col justify-center space-y-3 md:w-full md:flex-row md:space-x-3 md:space-y-0">
-                  <div className=" relative flex">
-                    <input
-                      type="text"
-                      id='"form-subscribe-Filter'
-                      className=" mx-2 w-full flex-1 appearance-none rounded-lg border border-gray-300 border-transparent bg-white px-4 py-2 text-base text-gray-700 placeholder-gray-400 shadow-sm focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-600"
-                      placeholder="Ad Soyad"
-                    />
-                    <input
-                      type="text"
-                      id='"form-subscribe-Filter'
-                      className=" w-full flex-1 appearance-none rounded-lg border border-gray-300 border-transparent bg-white px-4 py-2 text-base text-gray-700 placeholder-gray-400 shadow-sm focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-600"
-                      placeholder="TC Kimlik No"
-                    />
-                  </div>
-                  <button
-                    className="flex-shrink-0 rounded-lg bg-blue-600 px-4 py-2 text-base font-semibold text-white shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-blue-200"
-                    type="submit"
-                  >
-                    Filtrele
-                  </button>
-                </form>
               </div>
             </div>
           </div>

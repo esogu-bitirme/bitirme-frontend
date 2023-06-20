@@ -24,10 +24,10 @@ export const Login = () => {
   }, [authContext.userType]);
 
   return (
-    <div className="flex w-full">
+    <div className="flex h-screen w-full">
       <div className="flex w-1/2 items-center justify-center">
         <div className="flex w-full max-w-md flex-col rounded-lg bg-gray-800 bg-white px-4 py-8 shadow sm:px-6 md:px-8 lg:px-10">
-          <div className="mb-2 self-center text-xl font-bold text-gray-600 text-white sm:text-2xl">
+          <div className="mb-2 self-center text-xl font-bold text-black text-gray-600 sm:text-2xl">
             Giriş Yap
           </div>
           <div className="mt-8">
@@ -62,7 +62,7 @@ export const Login = () => {
                     type="text"
                     id="sign-in-email"
                     className=" w-full flex-1 appearance-none rounded-r-lg border border-gray-300 bg-white px-4 py-2 text-base text-gray-700 placeholder-gray-400 shadow-sm focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-600"
-                    placeholder="T.C. Kimlik No"
+                    placeholder="E-Mail"
                     onChange={(e) => setUsername(e.target.value)}
                   />
                 </div>
@@ -118,7 +118,11 @@ export const Login = () => {
         </div>
       </div>
       <div className="w-1/2">
-        <img src="./login-page-image.webp" alt="Elinde meme kanseri tutan birinin logosu" />
+        <img
+          className="h-full w-full object-cover"
+          src="./login-page-image.webp"
+          alt="Elinde meme kanseri tutan birinin logosu"
+        />
       </div>
     </div>
   );

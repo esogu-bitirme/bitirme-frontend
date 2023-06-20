@@ -1,6 +1,7 @@
 import { createContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { UserToken } from '../types/userToken';
+import { ToastContainer, toast } from 'react-toastify';
 
 const AuthContext = createContext({
   isAuthenticated: false,
@@ -50,7 +51,9 @@ export const AuthProvider = ({ children }: { children: any }) => {
       })
       .then((data) => {
         const userData: UserToken = parseJwt(data);
-
+        toast.success('Giriş başarılı !', {
+          position: toast.POSITION.TOP_RIGHT,
+        });
         if (userData) {
           localStorage.setItem('token', data);
           setIsAuthenticated(true);
@@ -60,7 +63,9 @@ export const AuthProvider = ({ children }: { children: any }) => {
         }
       })
       .catch((error) => {
-        console.error('Error:', error);
+        toast.error('Bir hata oluştu !', {
+          position: toast.POSITION.TOP_RIGHT,
+        });
       });
   };
 

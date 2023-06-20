@@ -9,6 +9,8 @@ import ProtectedRoute from './context/ProtectedRoute';
 import { MyReports } from './pages/MyReports';
 import { Header } from './components/Header';
 import { Footer } from './components/Footer';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 function App() {
   const router = createBrowserRouter([
     {
@@ -50,6 +52,7 @@ function App() {
     <div className="z-0 flex h-screen w-screen flex-col justify-between ">
       <AuthProvider>
         <RouterProvider router={router} />
+        <ToastContainer />
       </AuthProvider>
     </div>
   );

@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { ReportListItem } from '../components/ReportListItem';
 import AuthContext from '../context/AuthContext';
+import { ToastContainer, toast } from 'react-toastify';
 
 const reports: any = [];
 
@@ -23,6 +24,11 @@ export const MyReports = () => {
       .then((data) => {
         setAllReports(data);
         console.log(data);
+      })
+      .catch((e) => {
+        toast.error('Bir hata meydana geldi!', {
+          position: toast.POSITION.TOP_RIGHT,
+        });
       });
   }, []);
 

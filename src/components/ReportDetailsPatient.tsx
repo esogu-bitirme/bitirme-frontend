@@ -1,6 +1,7 @@
 import React, { ChangeEvent, useState, useEffect } from 'react';
 import ImageDetails from './ImageDetails';
 import { Report } from '../types/report';
+import { ToastContainer, toast } from 'react-toastify';
 
 const ReportDetailsPatient = ({
   report,
@@ -24,13 +25,14 @@ const ReportDetailsPatient = ({
           setShowImage={setShowImage}
           showImage={showImage}
           setShowReportDetails={setThisShow}
+          imageData={currentImage} // TODO
         />
       ) : null}
       {showReportDetails && thisShow ? (
         <div className="fixed bottom-0 left-0 right-0 top-0 z-10 flex h-screen w-screen items-center justify-center bg-zinc-800 bg-opacity-60">
           <section className="w-full">
             <div className="container mx-auto max-w-2xl shadow-md md:w-3/4">
-              <div className="flex justify-between rounded-t-lg border-t-2 border-indigo-400 bg-white p-4 ">
+              <div className="flex justify-between rounded-t-lg border-t-2 border-blue-400 bg-white p-4 ">
                 <div>
                   <div className="mx-auto max-w-sm md:mx-0 md:w-full">
                     Rapor Numarası : {report?.id}
@@ -85,7 +87,7 @@ const ReportDetailsPatient = ({
                           <td className="flex justify-end">
                             <button
                               type="button"
-                              className="w-1/2 rounded-lg  bg-indigo-600 px-3 py-1 text-center font-semibold text-white  transition ease-in  hover:bg-indigo-700"
+                              className="w-1/2 rounded-lg  bg-blue-600 px-3 py-1 text-center font-semibold text-white  transition ease-in  hover:bg-blue-700"
                               onClick={() => {
                                 setThisShow(false);
                                 setShowImage(true);

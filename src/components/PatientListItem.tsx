@@ -1,6 +1,7 @@
 import React, { useContext, useState } from 'react';
 import { Patient } from '../types/patient';
 import AuthContext from '../context/AuthContext';
+import { ToastContainer, toast } from 'react-toastify';
 
 export const PatientListItem = ({
   patient,
@@ -27,6 +28,14 @@ export const PatientListItem = ({
       })
       .then((data) => {
         location.reload();
+        toast.success('Hasta başarıyla silindi!', {
+          position: toast.POSITION.TOP_RIGHT,
+        });
+      })
+      .catch((e) => {
+        toast.error('Bir hata meydana geldi!', {
+          position: toast.POSITION.TOP_RIGHT,
+        });
       });
   };
   return (
@@ -50,24 +59,28 @@ export const PatientListItem = ({
         <p className="whitespace-no-wrap text-gray-900">{patient.address}</p>
       </td>
 
-      <td className="border-b border-gray-200 bg-white px-5 py-5 text-sm">
-        <button
-          type="button"
-          className="w-1/2 rounded-lg  bg-indigo-600 px-3 py-1 text-center text-base font-semibold text-white shadow-md transition duration-200 ease-in hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2  focus:ring-offset-indigo-200 "
-          onClick={() => {
-            setShowPatientReports(true);
-            setPatientReportsView(patient);
-          }}
-        >
-          Görüntüle
-        </button>
-        <button
-          type="button"
-          className="w-1/2 rounded-lg  bg-red-600 px-3 py-1 text-center text-base font-semibold text-white shadow-md transition duration-200 ease-in hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2  focus:ring-offset-red-200 "
-          onClick={handleDeletePatient}
-        >
-          Sil
-        </button>
+      <td className="flex border-b border-gray-200 bg-white px-5 py-5 text-sm">
+        <div className="w-1/2 p-1">
+          <button
+            type="button"
+            className=" w-full rounded-lg bg-blue-600 px-3 py-1 text-center  font-semibold text-white shadow-md transition duration-200 ease-in hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2  focus:ring-offset-blue-200 "
+            onClick={() => {
+              setShowPatientReports(true);
+              setPatientReportsView(patient);
+            }}
+          >
+            Görüntüle
+          </button>
+        </div>
+        <div className="w-1/2 p-1 ">
+          <button
+            type="button"
+            className="w-full rounded-lg  bg-red-600 px-3 py-1 text-center  font-semibold text-white shadow-md transition duration-200 ease-in hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2  focus:ring-offset-red-200 "
+            onClick={handleDeletePatient}
+          >
+            Sil
+          </button>
+        </div>
       </td>
     </tr>
   );

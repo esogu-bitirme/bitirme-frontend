@@ -25,26 +25,24 @@ export const Header = () => {
           >
             Anasayfa
           </a>
-          <a
-            className="mr-10 mt-4 block text-blue-900 hover:text-indigo-600 lg:mt-0 lg:inline-block"
-            href="#"
-          >
-            Hastalarım
-          </a>
-          <a
-            className="mr-10 mt-4 block text-blue-900 hover:text-indigo-600 lg:mt-0 lg:inline-block"
-            href="#"
-          >
-            Raporlarım
-          </a>
+          {authContext.userType == 'DOCTOR' && (
+            <a
+              className="mr-10 mt-4 block text-blue-900 hover:text-indigo-600 lg:mt-0 lg:inline-block"
+              href="/patients"
+            >
+              Hastalarım
+            </a>
+          )}
+          {authContext.userType == 'PATIENT' && (
+            <a
+              className="mr-10 mt-4 block text-blue-900 hover:text-indigo-600 lg:mt-0 lg:inline-block"
+              href="/reports"
+            >
+              Raporlarım
+            </a>
+          )}
         </div>
         <div className="navbar-menu hidden w-full lg:order-3 lg:block lg:w-2/5 lg:text-right">
-          <a
-            className="mr-10 mt-4 block text-blue-900 hover:text-indigo-600 lg:mt-0 lg:inline-block"
-            href="#"
-          >
-            Profil
-          </a>
           <a
             className="mt-4 block text-blue-900 hover:text-indigo-600 lg:mt-0 lg:inline-block"
             href="/login"

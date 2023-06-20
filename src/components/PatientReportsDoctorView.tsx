@@ -4,23 +4,7 @@ import { Patient } from '../types/patient';
 import ReportDetails from './ReportDetails';
 import AuthContext from '../context/AuthContext';
 import { Report } from '../types/report';
-
-// const reports = [
-//   {
-//     id: 1111111111,
-//     patientId: 1,
-//     doctorId: 1,
-//     reportDate: '11/1/2021 10:05:25',
-//     reportStatus: 'Bekleniyor',
-//   },
-//   {
-//     id: 2222222222,
-//     patientId: 1,
-//     doctorId: 1,
-//     reportDate: '22/22/2020 10:05:25',
-//     reportStatus: 'Bekleniyor',
-//   },
-// ];
+import { ToastContainer, toast } from 'react-toastify';
 
 const reports: Array<Report> = [];
 
@@ -57,6 +41,11 @@ export const PatientReportsDoctorView = ({
       })
       .then((data) => {
         setAllReports(data);
+      })
+      .catch((e) => {
+        toast.error('Bir hata meydana geldi!', {
+          position: toast.POSITION.TOP_RIGHT,
+        });
       });
   }, [showPatientReports]);
 
@@ -75,7 +64,7 @@ export const PatientReportsDoctorView = ({
       status: 0,
       diagnosis: '',
       description: '',
-      patientId: 10,
+      patientId: patientId,
     };
     fetch(`https://localhost:50198/api/report`, {
       method: 'POST',
@@ -85,23 +74,34 @@ export const PatientReportsDoctorView = ({
         Authorization: 'Bearer ' + authContext.token,
       },
       body: JSON.stringify(newReportBody),
-    }).then(() => {
-      fetch(`https://localhost:50198/api/report/patient/${patient?.id}`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*',
-          Authorization: 'Bearer ' + authContext.token,
-        },
-      })
-        .then((response) => {
-          return response.json();
+    })
+      .then(() => {
+        fetch(`https://localhost:50198/api/report/patient/${patient?.id}`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*',
+            Authorization: 'Bearer ' + authContext.token,
+          },
         })
-        .then((data) => {
-          setAllReports(data);
-          scrollToBottom();
+          .then((response) => {
+            return response.json();
+          })
+          .then((data) => {
+            setAllReports(data);
+            scrollToBottom();
+          })
+          .catch((e) => {
+            toast.error('Bir hata meydana geldi!', {
+              position: toast.POSITION.TOP_RIGHT,
+            });
+          });
+      })
+      .catch((e) => {
+        toast.error('Bir hata meydana geldi!', {
+          position: toast.POSITION.TOP_RIGHT,
         });
-    });
+      });
   };
 
   return (
@@ -163,7 +163,7 @@ export const PatientReportsDoctorView = ({
               <div className="mr-10">
                 <button
                   onClick={() => handleNewReport(patient?.id as number)}
-                  className=" flex w-full gap-2 rounded-lg  bg-indigo-600 px-3 py-1 text-center text-base font-semibold text-white shadow-md transition duration-200 ease-in hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2  focus:ring-offset-indigo-200 "
+                  className=" flex w-full gap-2 rounded-lg  bg-blue-600 px-3 py-1 text-center text-base font-semibold text-white shadow-md transition duration-200 ease-in hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2  focus:ring-offset-blue-200 "
                 >
                   Rapor Ekle
                   <svg
@@ -253,7 +253,7 @@ export const PatientReportsDoctorView = ({
                             <td className="border-b border-gray-200 bg-white px-5 py-5 text-sm">
                               <a
                                 href="#"
-                                className="text-indigo-600 hover:text-indigo-900"
+                                className="text-blue-600 hover:text-blue-900"
                                 onClick={() => {
                                   setCurrentReportDetails(report);
                                   setShowPatientReports(false);
